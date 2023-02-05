@@ -54,6 +54,9 @@ suspend fun onGuildVoiceUpdate(event: GuildVoiceUpdateEvent) {
         (event.channelJoined!! as VoiceChannel).parentCategory?.let {
             action.setParent(it)
         }
+        (event.channelJoined!! as VoiceChannel).userLimit?.let {
+            action.setUserlimit(it)
+        }
 
         try {
             val tempVoiceChannel = action.await()
