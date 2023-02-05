@@ -21,7 +21,7 @@ class Create: SlashCommand(
     )
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
-        val action = ctx.guild.createVoiceChannel("VC Generator")
+        val action = ctx.guild.createVoiceChannel("↪ Créer un salon vocal")
 
         ctx.getOption<Category>(options[0].name)?.let {
             action.setParent(it)
