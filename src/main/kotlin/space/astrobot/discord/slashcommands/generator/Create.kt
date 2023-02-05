@@ -16,7 +16,8 @@ class Create: SlashCommand(
     parentSlashCommand = Generator(),
     options = listOf(
         OptionData(OptionType.CHANNEL, "category", "The category where the generator will be created")
-            .setChannelTypes(ChannelType.CATEGORY)
+            .setChannelTypes(ChannelType.CATEGORY),
+        OptionData(OptionType.INTEGER, "limit", "The max amount of user in a temporary channel")
     )
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
@@ -24,6 +25,9 @@ class Create: SlashCommand(
 
         ctx.getOption<Category>(options[0].name)?.let {
             action.setParent(it)
+        }
+        ctx.getOption<Int>(options[1].name)?.let {
+            action.setUserlimit(it)
         }
 
         val generator = action.await()

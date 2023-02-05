@@ -44,7 +44,7 @@ suspend fun onGuildVoiceUpdate(event: GuildVoiceUpdateEvent) {
         }
 
         val action = guild
-            .createVoiceChannel(event.member.effectiveName + "'s VC")
+            .createVoiceChannel("Vocal de " + event.member.effectiveName)
             .addMemberPermissionOverride(
                 guild.selfMember.idLong,
                 listOf(Permission.VIEW_CHANNEL, Permission.VOICE_CONNECT),
