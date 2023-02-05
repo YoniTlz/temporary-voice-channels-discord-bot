@@ -37,4 +37,4 @@ jobs:
         context: ./
         # Note: tags has to be all lower-case
         tags: |
-          ghcr.io/giuliopime/temporary-voice-channels-discord-bot:latest
+          ghcr.io/yonitlz/temporary-voice-channels-discord-bot:latest
