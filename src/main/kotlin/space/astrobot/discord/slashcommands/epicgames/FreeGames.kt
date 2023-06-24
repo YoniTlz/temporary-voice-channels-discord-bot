@@ -14,11 +14,12 @@ class FreeGames: SlashCommand(
     parentSlashCommand = Epic(),
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
-        val client = HttpClient.newBuilder().build();
-        val request = HttpRequest.newBuilder()
-            .uri(URI.create("http://yonitlz.synology.me/epic-free-games?isDev=true"))
-            .build();
-        val response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        println(response.body())
+        println("////ici")
+//        val client = HttpClient.newBuilder().build();
+//        val request = HttpRequest.newBuilder()
+//            .uri(URI.create("http://yonitlz.synology.me/epic-free-games?isDev=true"))
+//            .build();
+//        val response = client.send(request, HttpResponse.BodyHandlers.ofString());
+//        println(response.body())
     }
 }
