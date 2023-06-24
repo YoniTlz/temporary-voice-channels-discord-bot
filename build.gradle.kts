@@ -23,7 +23,7 @@ repositories {
 
 dependencies {
     implementation("net.dv8tion:JDA:5.0.0-beta.3")
-    implementation("com.github.minndevelopment:jda-ktx:17eb77")
+    implementation("com.github.MinnDevelopment:jda-ktx:0.10.0-beta.1")
     implementation("io.github.cdimascio:dotenv-kotlin:6.3.1")
     implementation("io.github.microutils:kotlin-logging-jvm:2.1.23")
     implementation("ch.qos.logback:logback-classic:1.4.0")
