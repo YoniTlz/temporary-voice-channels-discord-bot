@@ -1,6 +1,5 @@
 package space.astrobot.discord.slashcommands.epicgames
 
-import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.interactions.commands.Command
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
@@ -23,23 +22,30 @@ class FreeGames : SlashCommand(
             .addChoices(
                 Command.Choice("PS Plus", "ps-plus"),
                 Command.Choice("Epic Games", "epic-games")
-            )
+            ),
+        OptionData(OptionType.STRING, "format", "Le niveau de détails", true)
+            .addChoices(
+                Command.Choice("Court", "court"),
+                Command.Choice("Long", "long")
+            ),
     )
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
         val action = ctx.getOption<String>(options[0].name)!!
+        var format = ctx.getOption<String>(options[1].name)
+        val isDetailed = format == "long"
         var channelId = ctx.channel.id
         var url = ""
         var plateforme = ""
 
         when (action) {
             "ps-plus" -> {
-                url = "https://yonitlz.synology.me/ps-plus-monthly-games?channelId=$channelId"
+                url = "https://yonitlz.synology.me/ps-plus-monthly-games?channelId=$channelId&isDetailed=$isDetailed"
                 plateforme = "PS Plus"
             }
 
             "epic-games" -> {
-                url = "https://yonitlz.synology.me/epic-free-games?channelId=$channelId"
+                url = "https://yonitlz.synology.me/epic-free-games?channelId=$channelId&isDetailed=$isDetailed"
                 plateforme = "Epic Games"
             }
         }
@@ -51,7 +57,7 @@ class FreeGames : SlashCommand(
             .build()
         client.newCall(request).execute()
 
-        ctx.reply("Récupération des jeux gratuits - **$plateforme**")
+        ctx.reply("Récupération des jeux gratuits - **$plateforme** - Format **$format**")
     }
 
     private fun prepareCerts(): Pair<Array<TrustManager>, SSLSocketFactory> {
