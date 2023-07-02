@@ -1,3 +1,3 @@
 
-rootProject.name = "astro-devlog"
+rootProject.name = "yeniz-bot"
 
