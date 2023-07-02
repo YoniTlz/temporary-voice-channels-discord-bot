@@ -1,4 +1,4 @@
-package space.astrobot.discord.slashcommands.epicgames
+package space.astrobot.discord.slashcommands.freegames
 
 import net.dv8tion.jda.api.interactions.commands.Command
 import net.dv8tion.jda.api.interactions.commands.OptionType
@@ -32,8 +32,8 @@ class FreeGames : SlashCommand(
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
         val action = ctx.getOption<String>(options[0].name)!!
-        var format = ctx.getOption<String>(options[1].name)
-        val isDetailed = format == "long"
+        var format = ctx.getOption<String>(options[1].name).toString().replaceFirstChar(Char::titlecase)
+        val isDetailed = format == "Long"
         var channelId = ctx.channel.id
         var url = ""
         var plateforme = ""
