@@ -40,7 +40,7 @@ class FreeGames : SlashCommand(
 
         when (action) {
             "ps-plus" -> {
-                url = "https://yonitlz.synology.me/ps-plus-monthly-games?channelId=$channelId&isDetailed=$isDetailed"
+                url = "https://yonitlz.synology.me/psn-free-games?channelId=$channelId&isDetailed=$isDetailed"
                 plateforme = "PS Plus"
             }
 

@@ -48,7 +48,7 @@ object SlashCommandsManager {
         logger.info { "Found and initialized ${commands.size} slash commands" }
     }
 
-    suspend fun updateOnDiscord() {
+    suspend fun  updateOnDiscord() {
         val action = if (Env.Discord.working_guild_id.lowercase() == "any")
             Bot.jda.updateCommands()
         else
@@ -80,6 +80,9 @@ object SlashCommandsManager {
                 }
             }
         ).await()
+
+        action.addCommands(        Commands.slash("echo", "Repeats messages back to you.")
+        )
 
         logger.info { "Published slash commands to Discord" }
     }

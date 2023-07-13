@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.events.GenericEvent
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 
 object EventsManager {
     fun manage(jda: JDA) {
@@ -12,6 +13,7 @@ object EventsManager {
             when(it) {
                 is SlashCommandInteractionEvent -> onSlashCommand(it)
                 is GuildVoiceUpdateEvent -> onGuildVoiceUpdate(it)
+                is ButtonInteractionEvent -> onButtonInteraction(it)
             }
         }
     }
