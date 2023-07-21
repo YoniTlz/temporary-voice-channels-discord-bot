@@ -2,21 +2,12 @@ package space.astrobot.discord.events
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
-import net.dv8tion.jda.api.interactions.components.buttons.Button
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import space.astrobot.RestClient
 import space.astrobot.db.interactors.GuildsDBI
 import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommandCTX
 import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommandCategory
 import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommandsManager
 import space.astrobot.redis.TempVoiceChannelsRI
-import java.security.SecureRandom
-import java.security.cert.X509Certificate
-import javax.net.ssl.SSLContext
-import javax.net.ssl.SSLSocketFactory
-import javax.net.ssl.TrustManager
-import javax.net.ssl.X509TrustManager
 
 suspend fun onSlashCommand(event: SlashCommandInteractionEvent) {
     // Do not listen to DMs
@@ -81,40 +72,14 @@ fun onButtonInteraction(event: ButtonInteractionEvent) {
     when (event.componentId) {
         "fg-epic-voirPlus" -> {
             event.reply("Détail des jeux gratuits **Epic Games**").setEphemeral(true).queue()
-            execHttpRequest("https://yonitlz.synology.me/epic-free-games?channelId=${event.channel.id}&isDetailed=true")
+            val url ="https://yonitlz.synology.me/epic-free-games?channelId=${event.channel.id}&isDetailed=true"
+            RestClient.execRequestGet(url)
         }
 
         "fg-psn-voirPlus" -> {
             event.reply("Détail des jeux gratuits **PS PLus**").setEphemeral(true).queue()
-            execHttpRequest("https://yonitlz.synology.me/psn-free-games?channelId=${event.channel.id}&isDetailed=true")
+            val url = "https://yonitlz.synology.me/psn-free-games?channelId=${event.channel.id}&isDetailed=true"
+            RestClient.execRequestGet(url)
         }
     }
-}
-
-private fun execHttpRequest(url: String) {
-    val (trustAllCerts, sslSocketFactory) = prepareCerts()
-    val client = OkHttpClient.Builder().sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
-        .hostnameVerifier { _, _ -> true }.build()
-    val request = Request.Builder().url(url)
-        .build()
-    client.newCall(request).execute()
-}
-
-private fun prepareCerts(): Pair<Array<TrustManager>, SSLSocketFactory> {
-    //set self sign certificate
-    val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
-        override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {
-        }
-
-        override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
-        }
-
-        override fun getAcceptedIssuers() = arrayOf<X509Certificate>()
-    })
-    val sslContext = SSLContext.getInstance("SSL")
-    sslContext.init(null, trustAllCerts, SecureRandom())
-
-    // Create an ssl socket factory with our all-trusting manager
-    val sslSocketFactory = sslContext.socketFactory
-    return Pair(trustAllCerts, sslSocketFactory)
 }

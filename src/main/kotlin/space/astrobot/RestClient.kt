@@ -1,9 +1,10 @@
 package space.astrobot
 
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
+import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLContext
 import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.TrustManager
@@ -11,13 +12,37 @@ import javax.net.ssl.X509TrustManager
 
 object RestClient {
 
-    fun execRequest(url: String) {
-        val (trustAllCerts, sslSocketFactory) = prepareCerts()
-        val client = OkHttpClient.Builder().sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
-            .hostnameVerifier { _, _ -> true }.build()
-        val request = Request.Builder().url(url)
+    val JSON: MediaType = "application/json; charset=utf-8".toMediaTypeOrNull()!!
+
+    fun execRequestGet(url: String): Response {
+        val request = Request.Builder()
+            .url(url)
             .build()
-        client.newCall(request).execute()
+        return execRequest(request)
+    }
+
+    fun execRequestPost(url: String, body: RequestBody?): Response {
+        val request = Request.Builder()
+            .method("POST", body)
+            .url(url)
+            .build()
+        return execRequest(request)
+    }
+    fun execRequestDelete(url: String, body: RequestBody?): Response {
+        val request = Request.Builder()
+            .method("DELETE", null)
+            .url(url)
+            .build()
+        return execRequest(request)
+    }
+
+    private fun execRequest(request: Request): Response {
+        val (trustAllCerts, sslSocketFactory) = prepareCerts()
+        val client = OkHttpClient.Builder()
+            .readTimeout(30, TimeUnit.SECONDS)
+            .sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
+            .hostnameVerifier { _, _ -> true }.build()
+        return client.newCall(request).execute()
     }
 
     private fun prepareCerts(): Pair<Array<TrustManager>, SSLSocketFactory> {
