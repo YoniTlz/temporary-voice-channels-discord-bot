@@ -8,7 +8,7 @@ import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommandCTX
 
 class ResetDb : SlashCommand(
     name = "resetdb",
-    description = "Vide la base de données du BOT RL-Tracker",
+    description = "Vider la base de données du BOT RL-Tracker",
     requiredMemberPermissions = listOf(Permission.MANAGE_PERMISSIONS)
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {

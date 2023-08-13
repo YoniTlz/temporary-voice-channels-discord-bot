@@ -10,7 +10,7 @@ import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommandCTX
 
 class Status: SlashCommand(
     name = "status",
-    description = "Opens, closes, hides and un-hides your voice channel",
+    description = "Ouvre, ferme, masque et démasque votre salon vocal",
     parentSlashCommand = Vc(),
     options = listOf(
         OptionData(OptionType.STRING, "action", "Choose the status of the voice channel", true)

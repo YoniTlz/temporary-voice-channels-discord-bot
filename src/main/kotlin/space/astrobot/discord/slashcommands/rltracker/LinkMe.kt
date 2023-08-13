@@ -12,7 +12,7 @@ import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommandCTX
 
 class LinkMe : SlashCommand(
     name = "linkme",
-    description = "Associez votre compte pour récupérer vos classement sur Rocket League",
+    description = "Associer son compte Rocket League",
     options = listOf(
         OptionData(OptionType.STRING, "plateforme", "Plateforme du compte", true)
             .addChoices(

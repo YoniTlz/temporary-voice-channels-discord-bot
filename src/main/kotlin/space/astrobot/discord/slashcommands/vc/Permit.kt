@@ -10,7 +10,7 @@ import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommandCTX
 
 class Permit: SlashCommand(
     name = "permit",
-    description = "Permits a user to join your voice channel",
+    description = "Permet à un utilisateur de rejoindre votre salon vocal",
     parentSlashCommand = Vc(),
     options = listOf(
         OptionData(OptionType.USER, "user", "The user to permit", true)

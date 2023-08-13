@@ -8,7 +8,7 @@ import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommandCTX
 
 class Limit: SlashCommand(
     name = "limit",
-    description = "Sets a user limit to your voice channel",
+    description = "Définit une limite d'utilisateurs pour votre salon vocal",
     parentSlashCommand = Vc(),
     options = listOf(
         OptionData(OptionType.INTEGER, "limit", "The new limit", true)

@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData
 // Interface made to have a default execute action for all slash commands
 interface ExecutableSlashCommand {
     suspend fun execute(ctx: SlashCommandCTX) {
-        ctx.event.reply("Command outdated or not implemented!").queue()
+        ctx.event.reply("Commande obsolète ou non implémentée !").queue()
     }
 }
 

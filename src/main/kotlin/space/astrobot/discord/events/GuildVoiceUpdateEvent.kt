@@ -36,9 +36,9 @@ suspend fun onGuildVoiceUpdate(event: GuildVoiceUpdateEvent) {
         if (!guild.selfMember.hasPermission(Permission.VOICE_MOVE_OTHERS, Permission.MANAGE_CHANNEL)) {
             member.user.openPrivateChannel().await()
                 .sendMessage(
-                    "I could not create a temporary voice channel for you 'cause " +
-                            "I'm missing `Manage channels` or `Move members` permissions in the server `${guild.name}`." +
-                            "\n\nPlease report this to a server administrator!"
+                    "Je n'ai pas pu créer de canal vocal temporaire pour toi car" +
+                            "Il me manque les autorisations \"Gérer les salons\" ou \"Déplacer les membres\" sur le serveur `${guild.name}`." +
+                            "\n\nMerci de le signaler à un administrateur du serveur !"
                 ).await()
             return
         }
@@ -83,9 +83,9 @@ suspend fun onGuildVoiceUpdate(event: GuildVoiceUpdateEvent) {
                 if (e is ErrorResponseException && e.errorResponse == ErrorResponse.MISSING_PERMISSIONS || e is InsufficientPermissionException) {
                     member.user.openPrivateChannel().await()
                         .sendMessage(
-                            "I could not delete your temporary voice channel 'cause " +
-                                    "I'm missing `Manage channels` permissions in the server `${guild.name}`." +
-                                    "\n\nPlease report this to a server administrator!"
+                            "Je n'ai pas pu supprimer le salon vocal temporaire car" +
+                                    "Il me manque les autorisations \"Gérer les salons\" sur le serveur `${guild.name}`." +
+                                    "\n\nMerci de le signaler à un administrateur du serveur !"
                         ).await()
                 } else
                     logger.error(e) { "Couldn't delete a temporary voice channel (${event.channelLeft!!.id} in guild $guildId" }

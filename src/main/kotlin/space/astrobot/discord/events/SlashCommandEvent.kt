@@ -19,7 +19,7 @@ suspend fun onSlashCommand(event: SlashCommandInteractionEvent) {
     if the bot hasn't updated the commands yet
      */
     val slashCommand = SlashCommandsManager.get(event.fullCommandName) ?: run {
-        event.reply("This command is not available anymore as it's outdated.")
+        event.reply("Cette commande n'est plus disponible car elle est obsolète.")
             .setEphemeral(true)
             .queue()
         return
@@ -30,7 +30,7 @@ suspend fun onSlashCommand(event: SlashCommandInteractionEvent) {
 
     // Check if the bot has the required permissions
     if (!event.guild!!.selfMember.hasPermission(slashCommand.requiredBotPermissions)) {
-        event.reply("I need to following permissions to be able to run this command:\n" +
+        event.reply("J'ai besoin des autorisations suivantes pour pouvoir exécuter cette commande :\n" +
                 slashCommand.requiredBotPermissions.joinToString("\n") { it.getName() }
         ).queue()
         return
@@ -42,7 +42,7 @@ suspend fun onSlashCommand(event: SlashCommandInteractionEvent) {
         val tempVoiceChannelIndex = activeTempVoiceChannels.indexOfFirst { it.id == member.voiceState!!.channel?.id }
 
         if (tempVoiceChannelIndex == -1) {
-            event.reply("You need to be in a temporary voice channel to use this command!")
+            event.reply("Vous devez être dans un salon vocal temporaire pour utiliser cette commande !")
                 .setEphemeral(true)
                 .queue()
             return
@@ -50,8 +50,8 @@ suspend fun onSlashCommand(event: SlashCommandInteractionEvent) {
 
         if (activeTempVoiceChannels[tempVoiceChannelIndex].ownerId != event.user.id) {
             event.reply(
-                "You are not the owner of this temporary voice channel!" +
-                        "\nThe owner is <@${activeTempVoiceChannels[tempVoiceChannelIndex].ownerId}>"
+                "Tu n'es pas le propriétaire de ce salon vocal temporaire !" +
+                        "\nLe propriétaire c'est <@${activeTempVoiceChannels[tempVoiceChannelIndex].ownerId}>"
             )
                 .setEphemeral(true)
                 .queue()

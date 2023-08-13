@@ -8,7 +8,7 @@ import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommandCTX
 
 class Rename: SlashCommand(
     name = "rename",
-    description = "Changes the name of your voice channel",
+    description = "Modifie le nom de votre salon vocal",
     parentSlashCommand = Vc(),
     options = listOf(
         OptionData(OptionType.STRING, "name", "The new name for the voice channel", true)

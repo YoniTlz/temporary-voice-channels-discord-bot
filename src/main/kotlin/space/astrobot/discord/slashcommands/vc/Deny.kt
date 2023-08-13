@@ -10,7 +10,7 @@ import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommandCTX
 
 class Deny: SlashCommand(
     name = "deny",
-    description = "Denies a user from joining your voice channel",
+    description = "Interdit à un utilisateur de rejoindre votre salon vocal",
     parentSlashCommand = Vc(),
     options = listOf(
         OptionData(OptionType.USER, "user", "The user to deny", true)

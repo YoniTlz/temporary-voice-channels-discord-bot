@@ -11,7 +11,7 @@ import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommandCTX
 
 class RankMe : SlashCommand(
     name = "rankme",
-    description = "Récupérez les classements de votre compte Rocket League",
+    description = "Récupérer les classements de son compte Rocket League",
     options = listOf(
         OptionData(OptionType.STRING, "playlist", "Le type de playlist", true)
             .addChoices(

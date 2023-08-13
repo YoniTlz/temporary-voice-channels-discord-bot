@@ -6,7 +6,7 @@ import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommandCatego
 
 class Vc: SlashCommand(
     name = "vc",
-    description = "Parent of all vc commands",
+    description = "Parent des commandes /vc",
     category = SlashCommandCategory.VC,
     requiredBotPermissions = listOf(Permission.MANAGE_CHANNEL, Permission.MANAGE_ROLES)
 ) {

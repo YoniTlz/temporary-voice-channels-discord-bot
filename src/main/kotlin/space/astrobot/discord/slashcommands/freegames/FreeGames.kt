@@ -9,7 +9,7 @@ import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommandCTX
 
 class FreeGames : SlashCommand(
     name = "jeux-gratuits",
-    description = "Commande qui récupère la liste des jeux gratuits par plateforme",
+    description = "Récupérer la liste des jeux gratuits sur le PSN ou Epic Games Store",
     options = listOf(
         OptionData(OptionType.STRING, "plateforme", "Le nom de la plateforme", true)
             .addChoices(
