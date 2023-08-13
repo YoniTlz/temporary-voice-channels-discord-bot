@@ -51,10 +51,7 @@ class LinkMe : SlashCommand(
                 ctx.reply("⚠️ㅤTu a déjà associé un compte")
             }
             else -> {
-                val data = res.body?.string()
-                val json = JSONObject(data)
-                val displayName = json.getString("displayName")
-                ctx.reply("✅ㅤLe compte **$plateformeString** - **$displayName** a été correctement associé")
+                ctx.reply("✅Ton compte **$plateformeString** a été correctement associé")
             }
         }
         res.close()
