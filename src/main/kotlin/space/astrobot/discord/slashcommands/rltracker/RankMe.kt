@@ -22,25 +22,28 @@ class RankMe : SlashCommand(
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
         ctx.reply("🌐ㅤRécupération des classements. Cela peut prendre quelques secondes...")
-
-        var channelId = ctx.channel.id
-        var userId = ctx.user.id
-        val playlist = ctx.getOption<String>(options[0].name)!!
-        val jsonBody = "{" +
-                "\"channelId\": \"$channelId\"," +
-                "\"userId\": \"$userId\"," +
-                "\"playlist\": \"$playlist\"" +
-                "}"
-        val res = RestClient.execRequestPost(
-            "http://my-webhooks:8080/rl-tracker/rankme",
-            jsonBody.toRequestBody(RestClient.JSON)
-        )
-        if (res.code == 422) {
-            ctx.reply("❌ㅤAucun compte trouvé - Utilise la commande **/linkme** pour associer ton compte")
-        } else {
-            ctx.reply("✅ㅤTes classements ont été correctement récupérés")
+        try {
+            var channelId = ctx.channel.id
+            var userId = ctx.user.id
+            val playlist = ctx.getOption<String>(options[0].name)!!
+            val jsonBody = "{" +
+                    "\"channelId\": \"$channelId\"," +
+                    "\"userId\": \"$userId\"," +
+                    "\"playlist\": \"$playlist\"" +
+                    "}"
+            val res = RestClient.execRequestPost(
+                "http://my-webhooks:8080/rl-tracker/rankme",
+                jsonBody.toRequestBody(RestClient.JSON)
+            )
+            if (res.code == 422) {
+                ctx.reply("❌ㅤAucun compte trouvé - Utilise la commande **/linkme** pour associer ton compte")
+            } else {
+                ctx.reply("✅ㅤTes classements ont été correctement récupérés")
+            }
+            res.close()
+        } catch (err: Exception) {
+            ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
-        res.close()
     }
 }
 

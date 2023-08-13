@@ -24,29 +24,33 @@ class FreeGames : SlashCommand(
     )
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
-        val action = ctx.getOption<String>(options[0].name)!!
-        var format = ctx.getOption<String>(options[1].name).toString().replaceFirstChar(Char::titlecase)
-        val isDetailed = format == "Long"
-        var channelId = ctx.channel.id
-        var url = ""
-        var plateforme = ""
+        try {
+            val action = ctx.getOption<String>(options[0].name)!!
+            var format = ctx.getOption<String>(options[1].name).toString().replaceFirstChar(Char::titlecase)
+            val isDetailed = format == "Long"
+            var channelId = ctx.channel.id
+            var url = ""
+            var plateforme = ""
 
-        when (action) {
-            "ps-plus" -> {
-                url = "http://my-webhooks:8080/psn-free-games?channelId=$channelId&isDetailed=$isDetailed"
-                plateforme = "PS Plus"
+            when (action) {
+                "ps-plus" -> {
+                    url = "http://my-webhooks:8080/psn-free-games?channelId=$channelId&isDetailed=$isDetailed"
+                    plateforme = "PS Plus"
+                }
+
+                "epic-games" -> {
+                    url = "http://my-webhooks:8080/epic-free-games?channelId=$channelId&isDetailed=$isDetailed"
+                    plateforme = "Epic Games"
+                }
             }
 
-            "epic-games" -> {
-                url = "http://my-webhooks:8080/epic-free-games?channelId=$channelId&isDetailed=$isDetailed"
-                plateforme = "Epic Games"
-            }
+            val res = RestClient.execRequestGet(url)
+
+            // Reply
+            ctx.reply("Récupération des jeux gratuits - **$plateforme** - Format **$format**")
+        } catch (err: Exception) {
+            ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
-
-        val res = RestClient.execRequestGet(url)
-
-        // Reply
-        ctx.reply("Récupération des jeux gratuits - **$plateforme** - Format **$format**")
     }
 
 }

@@ -32,34 +32,37 @@ class GetRank : SlashCommand(
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
         ctx.reply("🌐ㅤRécupération des classements. Cela peut prendre quelques secondes...")
+        try {
+            var channelId = ctx.channel.id
+            var userId = ctx.userId
+            val plateform = ctx.getOption<String>(options[0].name)!!
+            var plateformId = ctx.getOption<String>(options[1].name)!!
+            val playlist = ctx.getOption<String>(options[2].name)!!
 
-        var channelId = ctx.channel.id
-        var userId = ctx.userId
-        val plateform = ctx.getOption<String>(options[0].name)!!
-        var plateformId = ctx.getOption<String>(options[1].name)!!
-        val playlist = ctx.getOption<String>(options[2].name)!!
-
-        val jsonBody = "{" +
-                "\"channelId\": \"$channelId\"," +
-                "\"userId\": \"$userId\"," +
-                "\"platform\": \"$plateform\"," +
-                "\"platformId\": \"$plateformId\"," +
-                "\"playlist\": \"$playlist\"" +
-                "}"
-        val res = RestClient.execRequestPost(
-            "http://my-webhooks:8080/rl-tracker/getrank",
-            jsonBody.toRequestBody(RestClient.JSON)
-        )
-        println("$$$ $res")
-        if (res.code == 404) {
-            ctx.reply("❌ㅤCompte introuvable - Vérifie que la plateforme et l'identifiant sont corrects")
-        } else {
-            val data = res.body?.string()
-            val json = JSONObject(data)
-            val displayName = json.getString("displayName")
-            ctx.reply("✅ㅤLes classements de ***${displayName}*** ont été correctement récupérés")
+            val jsonBody = "{" +
+                    "\"channelId\": \"$channelId\"," +
+                    "\"userId\": \"$userId\"," +
+                    "\"platform\": \"$plateform\"," +
+                    "\"platformId\": \"$plateformId\"," +
+                    "\"playlist\": \"$playlist\"" +
+                    "}"
+            val res = RestClient.execRequestPost(
+                "http://my-webhooks:8080/rl-tracker/getrank",
+                jsonBody.toRequestBody(RestClient.JSON)
+            )
+            println("$$$ $res")
+            if (res.code == 404) {
+                ctx.reply("❌ㅤCompte introuvable - Vérifie que la plateforme et l'identifiant sont corrects")
+            } else {
+                val data = res.body?.string()
+                val json = JSONObject(data)
+                val displayName = json.getString("displayName")
+                ctx.reply("✅ㅤLes classements de ***${displayName}*** ont été correctement récupérés")
+            }
+            res.close()
+        }catch (err: Exception){
+            ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
-        res.close()
     }
 }
 

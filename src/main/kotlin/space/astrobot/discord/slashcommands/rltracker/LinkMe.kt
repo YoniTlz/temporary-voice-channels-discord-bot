@@ -27,34 +27,39 @@ class LinkMe : SlashCommand(
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
         ctx.reply("🌐ㅤAssociation du comte en cours...")
+        try {
+            val plateforme = ctx.getOption<String>(options[0].name)!!
+            val identifiant = ctx.getOption<String>(options[1].name)!!
+            val userId = ctx.userId
+            val url = "http://my-webhooks:8080/rl-tracker/linkme"
+            val jsonBody = "{" +
+                    "\"userId\": \"$userId\"," +
+                    "\"platformId\": \"$identifiant\"," +
+                    "\"platform\": \"$plateforme\"" +
+                    "}"
+            val res = RestClient.execRequestPost(url, jsonBody.toRequestBody(RestClient.JSON))
+            val plateformeString = when (plateforme) {
+                "epic" -> "Epic Games"
+                else -> plateforme.replaceFirstChar(Char::titlecase)
+            }
+            when (res.code) {
+                404 -> {
+                    val username = identifiant.replaceFirstChar(Char::titlecase)
+                    ctx.reply("❌️ㅤLe compte **$username** est introuvable sur la plateforme **$plateformeString**")
+                }
 
-        val plateforme = ctx.getOption<String>(options[0].name)!!
-        val identifiant = ctx.getOption<String>(options[1].name)!!
-        val userId = ctx.userId
-        val url = "http://my-webhooks:8080/rl-tracker/linkme"
-        val jsonBody = "{" +
-                "\"userId\": \"$userId\"," +
-                "\"platformId\": \"$identifiant\"," +
-                "\"platform\": \"$plateforme\"" +
-                "}"
-        val res = RestClient.execRequestPost(url, jsonBody.toRequestBody(RestClient.JSON))
-        val plateformeString = when (plateforme) {
-            "epic" -> "Epic Games"
-            else -> plateforme.replaceFirstChar(Char::titlecase)
+                422 -> {
+                    ctx.reply("⚠️ㅤTu a déjà associé un compte")
+                }
+
+                else -> {
+                    ctx.reply("✅Ton compte **$plateformeString** a été correctement associé")
+                }
+            }
+            res.close()
+        } catch (err: Exception) {
+            ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
-        when (res.code) {
-            404 -> {
-                val username = identifiant.replaceFirstChar(Char::titlecase)
-                ctx.reply("❌️ㅤLe compte **$username** est introuvable sur la plateforme **$plateformeString**")
-            }
-            422 -> {
-                ctx.reply("⚠️ㅤTu a déjà associé un compte")
-            }
-            else -> {
-                ctx.reply("✅Ton compte **$plateformeString** a été correctement associé")
-            }
-        }
-        res.close()
     }
 }
 

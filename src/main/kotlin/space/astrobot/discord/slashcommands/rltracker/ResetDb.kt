@@ -12,13 +12,17 @@ class ResetDb : SlashCommand(
     requiredMemberPermissions = listOf(Permission.MANAGE_PERMISSIONS)
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
-        val res = RestClient.execRequestPost("http://my-webhooks:8080/rl-tracker/resetCollection", null)
-        if (res.code == 500) {
+        try {
+            val res = RestClient.execRequestPost("http://my-webhooks:8080/rl-tracker/resetCollection", null)
+            if (res.code == 500) {
+                ctx.reply("❌ㅤOups... Une erreur est survenue")
+            } else {
+                ctx.reply("✅ㅤLa base de données a correctement été réinitialisée")
+            }
+            res.close()
+        } catch (err: Exception) {
             ctx.reply("❌ㅤOups... Une erreur est survenue")
-        } else {
-            ctx.reply("✅ㅤLa base de données a correctement été réinitialisée")
         }
-        res.close()
     }
 }
 
