@@ -55,7 +55,7 @@ class LinkMe : SlashCommand(
                 }
 
                 else -> {
-                    ctx.reply("✅Ton compte **$plateformeString** a été correctement associé")
+                    ctx.reply("✅  Ton compte **$plateformeString** a été correctement associé")
                 }
             }
             res.close()

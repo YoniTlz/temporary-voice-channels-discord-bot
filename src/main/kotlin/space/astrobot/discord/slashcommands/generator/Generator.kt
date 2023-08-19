@@ -6,7 +6,7 @@ import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommand
 // Example of a top level command
 class Generator: SlashCommand(
     name = "generator",
-    description = "Parent command for all generator commands",
+    description = "Commande parente des commandes generator",
     requiredBotPermissions = listOf(Permission.MANAGE_CHANNEL),
     requiredMemberPermissions = listOf(Permission.ADMINISTRATOR)
 )

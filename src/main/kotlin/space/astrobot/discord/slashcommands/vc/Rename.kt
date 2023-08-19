@@ -11,7 +11,7 @@ class Rename: SlashCommand(
     description = "Modifie le nom de votre salon vocal",
     parentSlashCommand = Vc(),
     options = listOf(
-        OptionData(OptionType.STRING, "name", "The new name for the voice channel", true)
+        OptionData(OptionType.STRING, "name", "Le nouveau nom du salon vocal", true)
     )
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
@@ -19,6 +19,6 @@ class Rename: SlashCommand(
 
         ctx.getVoiceChannel().manager.setName(name.take(100)).await()
 
-        ctx.reply("Your channel name has been changed!")
+        ctx.reply("Le nom de votre salon a été modifié!")
     }
 }

@@ -33,6 +33,8 @@ services:
     image: mongo:4.4.6
     container_name: "astro-devlog-mongo"
     restart: always
+    ports:
+      - "27017:27017"
     volumes:
       - db-data:/data/db # This is the default location for mongodb data storing
     networks:

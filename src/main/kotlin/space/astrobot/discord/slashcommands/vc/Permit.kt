@@ -13,14 +13,14 @@ class Permit: SlashCommand(
     description = "Permet à un utilisateur de rejoindre votre salon vocal",
     parentSlashCommand = Vc(),
     options = listOf(
-        OptionData(OptionType.USER, "user", "The user to permit", true)
+        OptionData(OptionType.USER, "user", "L'utilisateur à autoriser", true)
     )
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
         val user = ctx.getOption<User>(options[0].name)!!
 
         if(!ctx.guild.isMember(user)) {
-            ctx.reply("The user is not from this server!")
+            ctx.reply("L'utilisateur n'est pas de ce serveur !")
             return
         }
 
@@ -30,6 +30,6 @@ class Permit: SlashCommand(
             listOf()
         ).await()
 
-        ctx.reply("<@${user.id}> can now join your voice channel!")
+        ctx.reply("<@${user.id}> peut maintenant rejoindre votre salon!")
     }
 }

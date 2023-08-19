@@ -20,7 +20,7 @@ class Deny: SlashCommand(
         val user = ctx.getOption<User>(options[0].name)!!
 
         if(!ctx.guild.isMember(user)) {
-            ctx.reply("The user is not from this server!")
+            ctx.reply("L'utilisateur n'est pas de ce serveur !")
             return
         }
 
@@ -30,6 +30,6 @@ class Deny: SlashCommand(
             listOf(Permission.VOICE_CONNECT)
         ).await()
 
-        ctx.reply("<@${user.id}> cannot join your voice channel anymore!")
+        ctx.reply("<@${user.id}> ne peut plus rejoindre votre salon !")
     }
 }

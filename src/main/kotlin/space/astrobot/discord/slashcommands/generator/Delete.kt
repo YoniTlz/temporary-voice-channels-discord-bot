@@ -15,25 +15,25 @@ import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommandCTX
 
 class Delete: SlashCommand(
     name = "delete",
-    description = "Deletes a generator",
+    description = "Supprime un générateur",
     parentSlashCommand = Generator()
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
         val generators = ctx.guildDto.generators
         val menu = StringSelectMenu(
             customId = IdManager.get(),
-            placeholder = "Select the generator to delete",
+            placeholder = "Sélectionnez le générateur à supprimer",
             options = generators.mapIndexed { index, generatorDto ->
                 val generatorChannel = ctx.guild.getVoiceChannelById(generatorDto.id)
                 SelectOption(
-                    label = "${index + 1}) ${generatorChannel?.name ?: "Deleted channel"}",
-                    description = if (generatorChannel?.parentCategory != null) "From the ${generatorChannel.parentCategory!!.name} category" else "Not in a category",
+                    label = "${index + 1}) ${generatorChannel?.name ?: "Salon supprimé"}",
+                    description = if (generatorChannel?.parentCategory != null) "Depuis la catégorie ${generatorChannel.parentCategory!!.name}" else "Pas dans une catégorie",
                     value = index.toString()
                 )
             }
         )
 
-        ctx.reply("Select the generator to delete with the menu below\n(You have 60 seconds)", ActionRow.of(menu))
+        ctx.reply("Sélectionnez le générateur à supprimer avec le menu ci-dessous\n(Vous avez 60 secondes)", ActionRow.of(menu))
 
         /*
         Waits for a selection on the menu created above.
@@ -51,7 +51,7 @@ class Delete: SlashCommand(
             val generatorDeleted = generators.removeAt(index)
             ctx.guild.getVoiceChannelById(generatorDeleted.id)?.delete()?.await()
             GuildsDBI.updateValue(ctx.guildId, "generators", generators)
-            ctx.reply("Generator deleted!")
-        } ?: ctx.reply("Action canceled") // Otherwise don't delete anything
+            ctx.reply("Générateur supprimé!")
+        } ?: ctx.reply("Action annulée") // Otherwise don't delete anything
     }
 }

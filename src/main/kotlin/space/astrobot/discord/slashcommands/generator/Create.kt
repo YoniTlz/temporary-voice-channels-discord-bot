@@ -12,12 +12,12 @@ import space.astrobot.models.GeneratorDto
 
 class Create: SlashCommand(
     name = "create",
-    description = "Creates a generator for temporary voice channels",
+    description = "Crée un générateur de salons vocaux temporaires",
     parentSlashCommand = Generator(),
     options = listOf(
-        OptionData(OptionType.CHANNEL, "category", "The category where the generator will be created")
+        OptionData(OptionType.CHANNEL, "category", "La catégorie où le générateur sera créé")
             .setChannelTypes(ChannelType.CATEGORY),
-        OptionData(OptionType.INTEGER, "limit", "The max amount of user in a temporary channel")
+        OptionData(OptionType.INTEGER, "limit", "Le nombre maximum d'utilisateurs dans un salon temporaire")
     )
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
@@ -34,6 +34,6 @@ class Create: SlashCommand(
 
         GuildsDBI.pushValue(ctx.guildId, "generators", GeneratorDto(generator.id))
 
-        ctx.reply("You can now create temporary voice channels by joining ${generator.asMention}!")
+        ctx.reply("Vous pouvez maintenant créer des salons vocaux temporaires en rejoignant ${generator.asMention}!")
     }
 }

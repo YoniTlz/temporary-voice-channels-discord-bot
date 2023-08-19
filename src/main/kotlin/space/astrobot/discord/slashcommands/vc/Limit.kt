@@ -11,7 +11,7 @@ class Limit: SlashCommand(
     description = "Définit une limite d'utilisateurs pour votre salon vocal",
     parentSlashCommand = Vc(),
     options = listOf(
-        OptionData(OptionType.INTEGER, "limit", "The new limit", true)
+        OptionData(OptionType.INTEGER, "limit", "La nouvelle limite", true)
             .setMinValue(0)
             .setMaxValue(99)
     )
@@ -21,6 +21,6 @@ class Limit: SlashCommand(
 
         ctx.getVoiceChannel().manager.setUserLimit(limit).await()
 
-        ctx.reply("Set the user limit of your voice channel to `$limit`!")
+        ctx.reply("Définit la limite d'utilisateurs de votre salon vocal à `$limit`!")
     }
 }

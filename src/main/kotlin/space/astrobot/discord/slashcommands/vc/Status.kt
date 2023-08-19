@@ -13,12 +13,12 @@ class Status: SlashCommand(
     description = "Ouvre, ferme, masque et démasque votre salon vocal",
     parentSlashCommand = Vc(),
     options = listOf(
-        OptionData(OptionType.STRING, "action", "Choose the status of the voice channel", true)
+        OptionData(OptionType.STRING, "action", "Choisissez le statut du salon vocal", true)
             .addChoices(
-                Command.Choice("Open", "open"),
-                Command.Choice("Close", "close"),
-                Command.Choice("Hide", "hide"),
-                Command.Choice("Un-hide", "un-hide")
+                Command.Choice("Ouvert", "open"),
+                Command.Choice("Fermé", "close"),
+                Command.Choice("Masqué", "hide"),
+                Command.Choice("Démasqué", "un-hide")
             )
     )
 ) {
@@ -31,21 +31,21 @@ class Status: SlashCommand(
         when (action) {
             "open" -> {
                 targetPermission = Permission.VOICE_CONNECT
-                channelStatus = "open"
+                channelStatus = "ouvert"
             }
             "close" -> {
                 denyPermission = true
                 targetPermission = Permission.VOICE_CONNECT
-                channelStatus = "closed"
+                channelStatus = "fermé"
             }
             "hide" -> {
                 denyPermission = true
                 targetPermission = Permission.VIEW_CHANNEL
-                channelStatus = "hidden"
+                channelStatus = "masqué"
             }
             "un-hide" -> {
                 targetPermission = Permission.VIEW_CHANNEL
-                channelStatus = "un-hidden"
+                channelStatus = "démasqué"
             }
         }
 
@@ -56,6 +56,6 @@ class Status: SlashCommand(
                 it.grant(targetPermission)
         }.await()
 
-        ctx.reply("Your channel is now **$channelStatus**!")
+        ctx.reply("Votre salon est maintenant **$channelStatus**!")
     }
 }
