@@ -72,13 +72,13 @@ fun onButtonInteraction(event: ButtonInteractionEvent) {
     when (event.componentId) {
         "fg-epic-voirPlus" -> {
             event.reply("Détail des jeux gratuits **Epic Games**").setEphemeral(true).queue()
-            val url ="https://yonitlz.synology.me/epic-free-games?channelId=${event.channel.id}&isDetailed=true"
+            val url ="http://my-webhooks:8080/epic-free-games?channelId=${event.channel.id}&isDetailed=true"
             RestClient.execRequestGet(url)
         }
 
         "fg-psn-voirPlus" -> {
             event.reply("Détail des jeux gratuits **PS PLus**").setEphemeral(true).queue()
-            val url = "https://yonitlz.synology.me/psn-free-games?channelId=${event.channel.id}&isDetailed=true"
+            val url = "http://my-webhooks:8080/psn-free-games?channelId=${event.channel.id}&isDetailed=true"
             RestClient.execRequestGet(url)
         }
     }
