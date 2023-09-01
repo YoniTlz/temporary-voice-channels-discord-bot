@@ -28,11 +28,13 @@ class UpdateAccount : SlashCommand(
     override suspend fun execute(ctx: SlashCommandCTX) {
         ctx.reply("🌐ㅤMise à jour du comte en cours...")
         try {
+            val channelId = ctx.channel.id
             val plateforme = ctx.getOption<String>(options[0].name)!!
             val identifiant = ctx.getOption<String>(options[1].name)!!
             val userId = ctx.userId
             val url = "http://my-webhooks:8080/rl-tracker/update-profile"
             val jsonBody = "{" +
+                    "\"channelId\": \"$channelId\"," +
                     "\"userId\": \"$userId\"," +
                     "\"platformId\": \"$identifiant\"," +
                     "\"platform\": \"$plateforme\"" +
