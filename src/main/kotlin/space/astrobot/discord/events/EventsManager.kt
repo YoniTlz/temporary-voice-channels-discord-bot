@@ -5,10 +5,10 @@ import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.events.GenericEvent
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent
-import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 
 object EventsManager {
     fun manage(jda: JDA) {
@@ -19,7 +19,7 @@ object EventsManager {
                 is ButtonInteractionEvent -> onButtonInteraction(it)
                 is GuildMemberJoinEvent -> onServerJoin(it)
                 is GuildMemberRemoveEvent -> onServerLeave(it)
-                is GuildMemberRoleAddEvent -> onRoleAdded(it)
+                is MessageReactionAddEvent -> onAddMessageReaction(it)
             }
         }
     }
