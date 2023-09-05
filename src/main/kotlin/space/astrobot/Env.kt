@@ -32,6 +32,10 @@ object Env {
         var port = 6379
     }
 
+    object WebhookClient{
+        lateinit var webhook_client_token: String
+    }
+
     init {
         loadEnv()
     }
@@ -48,6 +52,8 @@ object Env {
 
         Redis.host = get("redis_host")
         Redis.port = getInt("redis_port")
+
+        WebhookClient.webhook_client_token = get("webhook_client_token")
     }
 
     private fun get(path: String): String {
