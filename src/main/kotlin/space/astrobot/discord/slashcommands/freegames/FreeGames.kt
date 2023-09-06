@@ -49,6 +49,7 @@ class FreeGames : SlashCommand(
             // Reply
             ctx.reply("Récupération des jeux gratuits - **$plateforme** - Format **$format**")
         } catch (err: Exception) {
+            println("Une erreur est survenue: ${err}")
             ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
     }

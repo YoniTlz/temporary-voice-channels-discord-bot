@@ -1,6 +1,7 @@
 package space.astrobot.discord.slashcommands.rltracker
 
 import net.dv8tion.jda.api.Permission
+import okhttp3.RequestBody.Companion.toRequestBody
 import space.astrobot.RestClient
 import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommand
 import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommandCTX
@@ -13,7 +14,9 @@ class NewSeason : SlashCommand(
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
         try {
-            val res = RestClient.execRequestPost("http://my-webhooks:8080/rl-tracker/new-season", null)
+            val res = RestClient.execRequestPost(
+                "http://my-webhooks:8080/rl-tracker/new-season", "{}".toRequestBody(RestClient.JSON)
+            )
             if (res.code == 500) {
                 ctx.reply("❌ㅤOups... Une erreur est survenue")
             } else {
@@ -21,6 +24,7 @@ class NewSeason : SlashCommand(
             }
             res.close()
         } catch (err: Exception) {
+            println("Une erreur est survenue: ${err}")
             ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
     }

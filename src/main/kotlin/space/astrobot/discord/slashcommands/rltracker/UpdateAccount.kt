@@ -60,6 +60,7 @@ class UpdateAccount : SlashCommand(
             }
             res.close()
         } catch (err: Exception) {
+            println("Une erreur est survenue: ${err}")
             ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
     }
