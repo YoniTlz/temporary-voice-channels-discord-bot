@@ -49,15 +49,19 @@ class LinkMe : SlashCommand(
             when (res.code) {
                 404 -> {
                     val username = identifiant.replaceFirstChar(Char::titlecase)
-                    ctx.reply("❌️ㅤLe compte **$username** est introuvable sur la plateforme **$plateformeString**")
+                    ctx.reply("❌️ㅤLe compte **$identifiant** est introuvable sur la plateforme **$plateformeString**")
                 }
 
                 422 -> {
-                    ctx.reply("⚠️ㅤTu a déjà associé un compte")
+                    ctx.reply("⚠️ㅤTu a déjà associé ce compte")
                 }
 
-                else -> {
+                201 -> {
                     ctx.reply("✅  Ton compte **$plateformeString** a été correctement associé")
+                }
+
+                202 -> {
+                    ctx.reply("✅  Ton compte **$plateformeString** a été correctement mis à jour")
                 }
             }
             res.close()
