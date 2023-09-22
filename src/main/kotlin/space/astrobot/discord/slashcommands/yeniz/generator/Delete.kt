@@ -1,4 +1,4 @@
-package space.astrobot.discord.slashcommands.generator
+package space.astrobot.discord.slashcommands.yeniz.generator
 
 import dev.minn.jda.ktx.coroutines.await
 import dev.minn.jda.ktx.events.await
@@ -7,7 +7,7 @@ import dev.minn.jda.ktx.interactions.components.StringSelectMenu
 import kotlinx.coroutines.withTimeoutOrNull
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent
 import net.dv8tion.jda.api.interactions.components.ActionRow
-import space.astrobot.Bot
+import space.astrobot.YenizBot
 import space.astrobot.db.interactors.GuildsDBI
 import space.astrobot.discord.interactionsLogic.IdManager
 import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommand
@@ -41,7 +41,7 @@ class Delete: SlashCommand(
         thanks to the withTimeoutOrNull method.
          */
         withTimeoutOrNull(60000) {
-            val event = Bot.jda.await<StringSelectInteractionEvent> {
+            val event = YenizBot.jda.await<StringSelectInteractionEvent> {
                 it.componentId == menu.id
             }
 

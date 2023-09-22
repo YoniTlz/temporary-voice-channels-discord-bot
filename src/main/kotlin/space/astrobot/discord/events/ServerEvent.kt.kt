@@ -2,7 +2,6 @@ package space.astrobot.discord.events
 
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent
-import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 import okhttp3.RequestBody.Companion.toRequestBody
 import space.astrobot.RestClient

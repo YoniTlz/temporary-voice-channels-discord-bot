@@ -1,4 +1,4 @@
-package space.astrobot.discord.slashcommands.freegames
+package space.astrobot.discord.slashcommands.yeniz.freegames
 
 import net.dv8tion.jda.api.interactions.commands.Command
 import net.dv8tion.jda.api.interactions.commands.OptionType

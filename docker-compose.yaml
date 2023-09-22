@@ -1,19 +1,19 @@
 version: "3.9"
 services:
-  my-webhooks:
-    image: ghcr.io/yonitlz/my-webhooks:latest
-    container_name: "my-webhooks"
-    restart: always
-    ports:
-      - "8080:8080"
-    depends_on:
-      - astro-devlog-mongo
-    env_file:
-      - my-webhooks/.env
-    networks:
-      - astro-devlog-network
+  #  my-webhooks:
+  #    image: yonitlz/my-webhooks:latest
+  #    container_name: "my-webhooks"
+  #    restart: always
+  #    ports:
+  #      - "8080:8080"
+  #    depends_on:
+  #      - astro-devlog-mongo
+  #    env_file:
+  #      - ../my-webhooks/.env
+  #    networks:
+  #      - astro-devlog-network
   astro-devlog:
-    image: ghcr.io/yonitlz/temporary-voice-channels-discord-bot:latest
+    image: yonitlz/temporary-voice-channels-discord-bot:latest
     container_name: "astro-devlog"
     depends_on:
       - astro-devlog-redis
@@ -30,13 +30,13 @@ services:
     networks:
       - astro-devlog-network
   astro-devlog-mongo:
-    image: mongo:4.4.6
+    image: mongo:6.0.1
     container_name: "astro-devlog-mongo"
     restart: always
     ports:
       - "27017:27017"
     volumes:
-      - db-data:/data/db # This is the default location for mongodb data storing
+      - db-data:/data/db2 # This is the default location for mongodb data storing
     networks:
       - astro-devlog-network
 

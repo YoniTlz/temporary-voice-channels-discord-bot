@@ -1,4 +1,4 @@
-package space.astrobot.discord.slashcommands.rltracker
+package space.astrobot.discord.slashcommands.rl.tracker
 
 import net.dv8tion.jda.api.interactions.commands.Command
 import net.dv8tion.jda.api.interactions.commands.OptionType

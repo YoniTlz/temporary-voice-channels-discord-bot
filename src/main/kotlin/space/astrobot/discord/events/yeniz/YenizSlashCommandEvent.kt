@@ -1,4 +1,4 @@
-package space.astrobot.discord.events
+package space.astrobot.discord.events.yeniz
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
@@ -6,7 +6,7 @@ import space.astrobot.RestClient
 import space.astrobot.db.interactors.GuildsDBI
 import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommandCTX
 import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommandCategory
-import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommandsManager
+import space.astrobot.discord.interactionsLogic.slashcommands.yeniz.YenizSlashCommandsManager
 import space.astrobot.redis.TempVoiceChannelsRI
 
 suspend fun onSlashCommand(event: SlashCommandInteractionEvent) {
@@ -18,7 +18,7 @@ suspend fun onSlashCommand(event: SlashCommandInteractionEvent) {
     A command which is not present in the code can be still be present on Discord
     if the bot hasn't updated the commands yet
      */
-    val slashCommand = SlashCommandsManager.get(event.fullCommandName) ?: run {
+    val slashCommand = YenizSlashCommandsManager.get(event.fullCommandName) ?: run {
         event.reply("Cette commande n'est plus disponible car elle est obsolète.")
             .setEphemeral(true)
             .queue()
@@ -72,7 +72,7 @@ fun onButtonInteraction(event: ButtonInteractionEvent) {
     when (event.componentId) {
         "fg-epic-voirPlus" -> {
             event.reply("Détail des jeux gratuits **Epic Games**").setEphemeral(true).queue()
-            val url ="http://my-webhooks:8080/epic-free-games?channelId=${event.channel.id}&isDetailed=true"
+            val url = "http://my-webhooks:8080/epic-free-games?channelId=${event.channel.id}&isDetailed=true"
             RestClient.execRequestGet(url)
         }
 

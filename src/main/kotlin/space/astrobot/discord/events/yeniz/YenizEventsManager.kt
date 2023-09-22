@@ -1,4 +1,4 @@
-package space.astrobot.discord.events
+package space.astrobot.discord.events.yeniz
 
 import dev.minn.jda.ktx.events.listener
 import net.dv8tion.jda.api.JDA
@@ -9,11 +9,15 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
+import space.astrobot.discord.events.onAddMessageReaction
+import space.astrobot.discord.events.onServerJoin
+import space.astrobot.discord.events.onServerLeave
 
-object EventsManager {
+object YenizEventsManager {
+
     fun manage(jda: JDA) {
         jda.listener<GenericEvent> {
-            when(it) {
+            when (it) {
                 is SlashCommandInteractionEvent -> onSlashCommand(it)
                 is GuildVoiceUpdateEvent -> onGuildVoiceUpdate(it)
                 is ButtonInteractionEvent -> onButtonInteraction(it)

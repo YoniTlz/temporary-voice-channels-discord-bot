@@ -1,4 +1,4 @@
-package space.astrobot.discord.slashcommands.vc
+package space.astrobot.discord.slashcommands.yeniz.vc
 
 import dev.minn.jda.ktx.coroutines.await
 import net.dv8tion.jda.api.interactions.commands.OptionType

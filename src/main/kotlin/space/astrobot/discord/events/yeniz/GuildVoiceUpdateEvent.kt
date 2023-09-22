@@ -1,4 +1,4 @@
-package space.astrobot.discord.events
+package space.astrobot.discord.events.yeniz
 
 import dev.minn.jda.ktx.coroutines.await
 import mu.KotlinLogging

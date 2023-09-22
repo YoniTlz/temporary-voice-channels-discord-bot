@@ -14,7 +14,8 @@ object Env {
     }
 
     object Discord {
-        lateinit var token: String
+        lateinit var discord_bot_yeniz_token: String
+        lateinit var discord_bot_rl_tracker_token: String
         lateinit var activity: String
         var activity_type_key: Int = 3
         var update_slash_commands: Boolean = true
@@ -41,7 +42,8 @@ object Env {
     }
 
     fun loadEnv() {
-        Discord.token = get("discord_token")
+        Discord.discord_bot_yeniz_token = get("DISCORD_BOT_YENIZ_TOKEN")
+        Discord.discord_bot_rl_tracker_token = get("DISOCRD_BOT_RL_TRACKER_TOKEN")
         Discord.activity = get("discord_activity")
         Discord.activity_type_key = getInt("discord_activity_type_key")
         Discord.update_slash_commands = getBoolean("discord_update_slash_commands")

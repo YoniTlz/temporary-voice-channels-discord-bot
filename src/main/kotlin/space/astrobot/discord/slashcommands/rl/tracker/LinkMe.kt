@@ -1,10 +1,9 @@
-package space.astrobot.discord.slashcommands.rltracker
+package space.astrobot.discord.slashcommands.rl.tracker
 
 import net.dv8tion.jda.api.interactions.commands.Command
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONObject
 import space.astrobot.RestClient
 import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommand
 import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommandCTX

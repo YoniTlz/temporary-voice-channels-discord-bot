@@ -1,7 +1,6 @@
-package space.astrobot.discord.slashcommands.test
+package space.astrobot.discord.slashcommands.rl.tracker
 
 import net.dv8tion.jda.api.Permission
-import okhttp3.internal.wait
 import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommand
 import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommandCTX
 

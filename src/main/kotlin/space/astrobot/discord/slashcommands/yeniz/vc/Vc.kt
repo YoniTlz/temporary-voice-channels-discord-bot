@@ -1,4 +1,4 @@
-package space.astrobot.discord.slashcommands.vc
+package space.astrobot.discord.slashcommands.yeniz.vc
 
 import net.dv8tion.jda.api.Permission
 import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommand

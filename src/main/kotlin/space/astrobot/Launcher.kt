@@ -23,7 +23,12 @@ suspend fun main() {
         // Connects to Redis cache
         RedisClient.connect()
         // Connects to Discord and runs the bot
-        Bot.start()
+        // Y.E.N.I.Z.
+        logger.info { "Y.E.N.I.Z. ⎯ Démarrage du BOT" }
+        YenizBot.start()
+        // RL-Tracker
+        logger.info { "RL-Tracker ⎯ Démarrage du BOT" }
+        RlTrackerBot.start()
     } catch (e: Exception) {
         logger.error(e) { "Shutting down" }
         exitProcess(1)

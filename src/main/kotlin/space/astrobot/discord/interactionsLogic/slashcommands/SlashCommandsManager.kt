@@ -1,91 +1,76 @@
 package space.astrobot.discord.interactionsLogic.slashcommands
 
-import dev.minn.jda.ktx.coroutines.await
 import mu.KotlinLogging
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions
 import net.dv8tion.jda.api.interactions.commands.build.Commands
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
+import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction
 import org.reflections.Reflections
-import space.astrobot.Bot
-import space.astrobot.Env
 
-private val logger = KotlinLogging.logger {}
+val logger = KotlinLogging.logger {}
 
-object SlashCommandsManager {
-    private var commands: Set<SlashCommand> = setOf()
-    private var commandsMap: Map<String, SlashCommand> = mapOf()
 
-    init {
-        // Read and instantiate all slash commands
-        val reflection = Reflections("space.astrobot.discord.slashcommands")
+fun initSlashCommandManager(reflection: Reflections, managerName: String): Set<SlashCommand> {
+    var commands = reflection.getSubTypesOf(SlashCommand::class.java)
+        .map { it.getDeclaredConstructor().newInstance() }
+        .toSet()
 
-        commands = reflection.getSubTypesOf(SlashCommand::class.java)
-            .map { it.getDeclaredConstructor().newInstance() }
-            .toSet()
-
-        // Check if they all have a valid name and description
-        val exceededLimits = commands.filter {
-            it.name.isEmpty()
-                    || it.description.isEmpty()
-                    || it.name.length > 32
-                    || it.description.length > 100
-        }
-
-        if (exceededLimits.isNotEmpty()) {
-            logger.error { "One or more commands have invalid name / description: ${exceededLimits.joinToString(", ") { it.path }}" }
-            throw IllegalArgumentException("Invalid slash commands parameters")
-        }
-
-        // Check for duplicated slash command paths
-        val duplicatePaths = commands.groupingBy { it.path }.eachCount().filter { it.value > 1 }
-        if (duplicatePaths.isNotEmpty()) {
-            logger.error { "Found duplicate command paths: ${duplicatePaths.toList().joinToString(", ") { "${it.second} duplicates ${it.first}" }}" }
-            throw IllegalArgumentException("Duplicate slash command names")
-        }
-
-        commandsMap = commands.associateBy({ it.path }, { it })
-
-        logger.info { "Found and initialized ${commands.size} slash commands" }
+    // Check if they all have a valid name and description
+    val exceededLimits = commands.filter {
+        it.name.isEmpty()
+                || it.description.isEmpty()
+                || it.name.length > 32
+                || it.description.length > 100
     }
 
-    suspend fun  updateOnDiscord() {
-        val action = if (Env.Discord.working_guild_id.lowercase() == "any")
-            Bot.jda.updateCommands()
-        else
-            Bot.jda.getGuildById(Env.Discord.working_guild_id)?.updateCommands() ?: let {
-                logger.error { "Working guild ID not valid" }
-                throw NoSuchElementException()
-            }
+    if (exceededLimits.isNotEmpty()) {
+        logger.error {
+            "$managerName ⎯ One or more commands have invalid name / description: ${
+                exceededLimits.joinToString(
+                    ", "
+                ) { it.path }
+            }"
+        }
+        throw IllegalArgumentException("Invalid slash commands parameters")
+    }
 
-        action.addCommands(
-            // First find all top-level commands
-            commands.filter { it.parentSlashCommand == null }.map { slashCommand ->
-                val slashCommandData = Commands.slash(slashCommand.name, slashCommand.description)
-                    .setDefaultPermissions(DefaultMemberPermissions.enabledFor(slashCommand.requiredMemberPermissions))
-                    .setGuildOnly(true)
+    // Check for duplicated slash command paths
+    val duplicatePaths = commands.groupingBy { it.path }.eachCount().filter { it.value > 1 }
+    if (duplicatePaths.isNotEmpty()) {
+        logger.error {
+            "$managerName ⎯ Found duplicate command paths: ${
+                duplicatePaths.toList().joinToString(", ") { "${it.second} duplicates ${it.first}" }
+            }"
+        }
+        throw IllegalArgumentException("Duplicate slash command names")
+    }
 
-                if (slashCommand.options.isNotEmpty())
-                    slashCommandData.addOptions(slashCommand.options)
-                else {
-                    // Then add sub commands to them
-                    slashCommandData.addSubcommands(
-                        commands.filter { it.parentSlashCommand != null && it.parentSlashCommand::class == slashCommand::class }.map { subCommand ->
+    return commands
+}
+
+fun addCommands(action: CommandListUpdateAction, commands: Set<SlashCommand>) {
+    action.addCommands(
+        // First find all top-level commands
+        commands.filter { it.parentSlashCommand == null }.map { slashCommand ->
+            val slashCommandData = Commands.slash(slashCommand.name, slashCommand.description)
+                .setDefaultPermissions(DefaultMemberPermissions.enabledFor(slashCommand.requiredMemberPermissions))
+                .setGuildOnly(true)
+
+            if (slashCommand.options.isNotEmpty())
+                slashCommandData.addOptions(slashCommand.options)
+            else {
+                // Then add sub commands to them
+                slashCommandData.addSubcommands(
+                    commands.filter { it.parentSlashCommand != null && it.parentSlashCommand::class == slashCommand::class }
+                        .map { subCommand ->
                             SubcommandData(
                                 subCommand.name,
                                 subCommand.description
                             )
                                 .addOptions(subCommand.options)
                         }
-                    )
-                }
+                )
             }
-        ).await()
-
-        action.addCommands(        Commands.slash("echo", "Repeats messages back to you.")
-        )
-
-        logger.info { "Published slash commands to Discord" }
-    }
-
-    fun get(path: String) = commandsMap[path]
+        }
+    ).queue()
 }
