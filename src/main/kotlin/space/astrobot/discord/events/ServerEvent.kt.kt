@@ -37,16 +37,17 @@ suspend fun onAddMessageReaction(event: MessageReactionAddEvent) {
     var roleId = ""
 
     if (msgId == MSG_CHOIX_ROLES) {
-        val reactionId = event.emoji.asCustom().id
-        if (reactionId == "1082687683773616239") {
+        val emojiId = event.emoji.asCustom().id
+        if (emojiId == "1082687683773616239") {
             roleId = ROLE_ROCKETTEUR
-        } else if (reactionId == "1082692441104199741") {
+        } else if (emojiId == "1082692441104199741") {
             roleId = ROLE_APEXEUR
         }
     }
 
     val alreadyHasRole =
         event.member?.roles?.stream()?.map { it.id }?.collect(Collectors.toList())?.contains(roleId)!!
+
     if (userMention != null && roleId != null && !alreadyHasRole) {
         event.guild.getRoleById(roleId)?.let { event.guild.addRoleToMember(event.member!!, it).queue() };
         addRole(userMention, roleId)
