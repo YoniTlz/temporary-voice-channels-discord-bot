@@ -17,7 +17,7 @@ object RestClient {
     fun execRequestGet(url: String): Response {
         val request = Request.Builder()
             .url(url)
-            .header("webhook-client-token", Env.WebhookClient.webhook_client_token)
+            .header("Authorization", Env.WebhookClient.webhook_client_token)
             .build()
         return execRequest(request)
     }
@@ -26,7 +26,7 @@ object RestClient {
         val request = Request.Builder()
             .method("POST", body)
             .url(url)
-            .header("webhook-client-token", Env.WebhookClient.webhook_client_token)
+            .header("Authorization", Env.WebhookClient.webhook_client_token)
             .build()
         return execRequest(request)
     }
@@ -34,7 +34,7 @@ object RestClient {
         val request = Request.Builder()
             .method("DELETE", null)
             .url(url)
-            .header("webhook-client-token", Env.WebhookClient.webhook_client_token)
+            .header("Authorization", Env.WebhookClient.webhook_client_token)
             .build()
         return execRequest(request)
     }
