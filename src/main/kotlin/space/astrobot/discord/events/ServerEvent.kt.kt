@@ -8,6 +8,7 @@ import space.astrobot.RestClient
 import java.util.stream.Collectors
 
 const val MSG_CHOIX_ROLES: String = "1148294440952287343"
+const val ROLE_GAMER: String = "1113468877381304450"
 const val ROLE_ROCKETTEUR: String = "1068560168863928330"
 const val ROLE_APEXEUR: String = "1068560673384173698"
 
@@ -19,6 +20,7 @@ suspend fun onServerJoin(event: GuildMemberJoinEvent) {
     val url = "http://my-webhooks:8080/discord/server-join"
     val res = RestClient.execRequestPost(url, jsonBody.toRequestBody(RestClient.JSON))
     res.close()
+    event.jda.getRoleById(ROLE_GAMER)?.let { event.guild.addRoleToMember(event.member, it) }
 }
 
 suspend fun onServerLeave(event: GuildMemberRemoveEvent) {
@@ -50,11 +52,11 @@ suspend fun onAddMessageReaction(event: MessageReactionAddEvent) {
 
     if (userMention != null && roleId != null && !alreadyHasRole) {
         event.guild.getRoleById(roleId)?.let { event.guild.addRoleToMember(event.member!!, it).queue() };
-        addRole(userMention, roleId)
+        welcomeRole(userMention, roleId)
     }
 }
 
-suspend fun addRole(userMention: String, roleId: String) {
+suspend fun welcomeRole(userMention: String, roleId: String) {
     val jsonBody = "{" +
             "\"userMention\": \"$userMention\"," +
             "\"roleId\": \"$roleId\"" +
