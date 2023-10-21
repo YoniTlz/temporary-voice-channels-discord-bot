@@ -24,9 +24,9 @@ suspend fun onServerJoin(event: GuildMemberJoinEvent) {
 }
 
 suspend fun onServerLeave(event: GuildMemberRemoveEvent) {
-    val userMention = event.user.asMention
+    val userName = event.user.effectiveName
     val jsonBody = "{" +
-            "\"userMention\": \"$userMention\"" +
+            "\"userName\": \"$userName\"" +
             "}"
     val url = "http://my-webhooks:8080/discord/server-leave"
     val res = RestClient.execRequestPost(url, jsonBody.toRequestBody(RestClient.JSON))
