@@ -2,7 +2,9 @@ package space.astrobot.discord.events
 
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
+import net.dv8tion.jda.api.interactions.commands.Command.Choice
 import okhttp3.RequestBody.Companion.toRequestBody
 import space.astrobot.RestClient
 import java.util.stream.Collectors
@@ -64,4 +66,22 @@ suspend fun welcomeRole(userMention: String, roleId: String) {
     val url = "http://my-webhooks:8080/discord/addRole"
     val res = RestClient.execRequestPost(url, jsonBody.toRequestBody(RestClient.JSON))
     res.close()
+}
+
+suspend fun onCommandAutocomplete(event: CommandAutoCompleteInteractionEvent) {
+    var suggestions: List<Choice> = mutableListOf()
+
+    if (event.fullCommandName == "addrole"|| event.fullCommandName == "removerole") {
+        val typing: String = event.focusedOption.value.orEmpty()
+        if (event.focusedOption.name == "user") {
+            val listMember = event.guild?.loadMembers()?.get().orEmpty()
+                .filter { member -> member.effectiveName.contains(typing, true) }
+            listMember.take(25).forEach { member -> suggestions += Choice(member.effectiveName, member.id) }
+        } else if (event.focusedOption.name == "role") {
+            val listRoles = event.guild?.roles.orEmpty().filter { role -> role.name.contains(typing, true) }
+            listRoles.take(25).forEach { role -> suggestions += Choice(role.name, role.id) }
+        }
+        return event.replyChoices(suggestions).queue()
+    }
+    return event.replyChoices(emptyList()).queue()
 }
