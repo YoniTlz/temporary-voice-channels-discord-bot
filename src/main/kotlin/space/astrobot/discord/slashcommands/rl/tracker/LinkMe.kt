@@ -26,12 +26,12 @@ class LinkMe : SlashCommand(
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
         ctx.reply("🌐ㅤAssociation du comte en cours...")
+        val plateforme = ctx.getOption<String>(options[0].name)!!
+        val identifiant = ctx.getOption<String>(options[1].name)!!
+        val channelId = ctx.channel.id
+        val userId = ctx.userId
+        val username = ctx.member.effectiveName
         try {
-            val channelId = ctx.channel.id
-            val plateforme = ctx.getOption<String>(options[0].name)!!
-            val identifiant = ctx.getOption<String>(options[1].name)!!
-            val userId = ctx.userId
-            val username = ctx.member.effectiveName
             val url = "http://my-webhooks:8080/rl-tracker/linkme"
             val jsonBody = "{" +
                     "\"channelId\": \"$channelId\"," +
@@ -65,7 +65,7 @@ class LinkMe : SlashCommand(
             }
             res.close()
         } catch (err: Exception) {
-            println("Une erreur est survenue: ${err}")
+            logErrorOnDiscord("LinkMe", err.message.orEmpty(), "{username: $username, plateforme: $plateforme, identifiant: $identifiant}", err.stackTraceToString())
             ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
     }

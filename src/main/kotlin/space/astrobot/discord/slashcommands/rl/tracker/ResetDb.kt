@@ -21,7 +21,7 @@ class ResetDb : SlashCommand(
             }
             res.close()
         } catch (err: Exception) {
-            println("Une erreur est survenue: ${err}")
+            logErrorOnDiscord("ResetDb", err.message.orEmpty(), "{}", err.stackTraceToString())
             ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
     }

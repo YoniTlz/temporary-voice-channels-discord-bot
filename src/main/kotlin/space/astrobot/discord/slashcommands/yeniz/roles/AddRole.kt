@@ -17,9 +17,9 @@ class AddRole : SlashCommand(
     )
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
+        val userId = ctx.getOption<String>(options[0].name)!!
+        val roleId = ctx.getOption<String>(options[1].name)!!
         try {
-            val userId = ctx.getOption<String>(options[0].name)!!
-            val roleId = ctx.getOption<String>(options[1].name)!!
             val role = ctx.guild.roles.filter { role -> role.id == roleId }[0]!!
             val member = ctx.guild?.loadMembers()?.get()?.filter { member -> member.id == userId }?.get(0)!!
             ctx.guild.addRoleToMember(member, role).queue()
@@ -28,7 +28,7 @@ class AddRole : SlashCommand(
             // Reply
             ctx.reply("Ajout du rôle **${role.name}** à l'utilisateur **${member.effectiveName}**")
         } catch (err: Exception) {
-            println("Une erreur est survenue: $err")
+            logErrorOnDiscord("AddRole", err.message.orEmpty(), "{userId: $userId, roleId: $roleId}", err.stackTraceToString())
             ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
     }

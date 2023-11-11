@@ -24,9 +24,9 @@ class FreeGames : SlashCommand(
     )
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
+        val action = ctx.getOption<String>(options[0].name)!!
+        var format = ctx.getOption<String>(options[1].name).toString().replaceFirstChar(Char::titlecase)
         try {
-            val action = ctx.getOption<String>(options[0].name)!!
-            var format = ctx.getOption<String>(options[1].name).toString().replaceFirstChar(Char::titlecase)
             val isDetailed = format == "Long"
             var channelId = ctx.channel.id
             var url = ""
@@ -49,7 +49,7 @@ class FreeGames : SlashCommand(
             // Reply
             ctx.reply("Récupération des jeux gratuits - **$plateforme** - Format **$format**")
         } catch (err: Exception) {
-            println("Une erreur est survenue: ${err}")
+            logErrorOnDiscord("FreeGames", err.message.orEmpty(), "{action: $action, format: $format}", err.stackTraceToString())
             ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
     }

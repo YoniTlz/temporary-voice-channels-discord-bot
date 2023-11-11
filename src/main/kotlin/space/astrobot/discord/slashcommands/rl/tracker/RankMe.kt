@@ -22,10 +22,10 @@ class RankMe : SlashCommand(
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
         ctx.reply("🌐ㅤRécupération des classements. Cela peut prendre quelques secondes...")
+        var channelId = ctx.channel.id
+        var userId = ctx.user.id
+        val playlist = ctx.getOption<String>(options[0].name)!!
         try {
-            var channelId = ctx.channel.id
-            var userId = ctx.user.id
-            val playlist = ctx.getOption<String>(options[0].name)!!
             val jsonBody = "{" +
                     "\"channelId\": \"$channelId\"," +
                     "\"userId\": \"$userId\"," +
@@ -42,7 +42,7 @@ class RankMe : SlashCommand(
             }
             res.close()
         } catch (err: Exception) {
-            println("Une erreur est survenue: ${err}")
+            logErrorOnDiscord("RankMe", err.message.orEmpty(), "{userId: $userId, playlist: $playlist}", err.stackTraceToString())
             ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
     }

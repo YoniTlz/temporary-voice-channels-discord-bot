@@ -24,7 +24,7 @@ class NewSeason : SlashCommand(
             }
             res.close()
         } catch (err: Exception) {
-            println("Une erreur est survenue: ${err}")
+            logErrorOnDiscord("NewSeason", err.message.orEmpty(), "{}", err.stackTraceToString())
             ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
     }
