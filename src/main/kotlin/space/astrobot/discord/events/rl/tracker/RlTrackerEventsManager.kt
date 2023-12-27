@@ -14,7 +14,6 @@ object RlTrackerEventsManager {
             when (it) {
                 is SlashCommandInteractionEvent -> onSlashCommand(it)
                 is ButtonInteractionEvent -> onButtonInteraction(it)
-                is MessageReactionAddEvent -> onAddMessageReaction(it)
             }
         }
     }

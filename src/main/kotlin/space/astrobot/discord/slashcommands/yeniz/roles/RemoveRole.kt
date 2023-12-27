@@ -27,7 +27,7 @@ class RemoveRole : SlashCommand(
             // Reply
             ctx.reply("Suppression du rôle **${role.name}** à l'utilisateur **${member.effectiveName}**")
         } catch (err: Exception) {
-            logErrorOnDiscord("RemoveRole", err.message.orEmpty(), "{userId: $userId, roleId: $roleId}", err.stackTraceToString())
+            logErrorOnDiscord("RemoveRole", err.message.orEmpty(), "{userId: $userId, roleId: $roleId}", err.stackTraceToString().replace("\n", "\\n"))
             ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
     }
