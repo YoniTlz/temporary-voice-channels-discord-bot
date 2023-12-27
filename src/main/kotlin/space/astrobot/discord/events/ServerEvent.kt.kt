@@ -22,7 +22,7 @@ suspend fun onServerJoin(event: GuildMemberJoinEvent) {
     val url = "http://my-webhooks:8080/discord/server-join"
     val res = RestClient.execRequestPost(url, jsonBody.toRequestBody(RestClient.JSON))
     res.close()
-    event.jda.getRoleById(ROLE_GAMER)?.let { event.guild.addRoleToMember(event.member, it) }
+    event.jda.getRoleById(ROLE_GAMER)?.let { event.guild.addRoleToMember(event.member, it).queue() }
 }
 
 suspend fun onServerLeave(event: GuildMemberRemoveEvent) {
