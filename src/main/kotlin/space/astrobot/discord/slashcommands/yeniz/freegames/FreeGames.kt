@@ -34,12 +34,12 @@ class FreeGames : SlashCommand(
 
             when (action) {
                 "ps-plus" -> {
-                    url = "http://my-webhooks:8080/psn-free-games?channelId=$channelId&isDetailed=$isDetailed"
+                    url = "http://my-webhooks:8080/misc/psn-free-games?channelId=$channelId&isDetailed=$isDetailed"
                     plateforme = "PS Plus"
                 }
 
                 "epic-games" -> {
-                    url = "http://my-webhooks:8080/epic-free-games?channelId=$channelId&isDetailed=$isDetailed"
+                    url = "http://my-webhooks:8080/misc/epic-free-games?channelId=$channelId&isDetailed=$isDetailed"
                     plateforme = "Epic Games"
                 }
             }
