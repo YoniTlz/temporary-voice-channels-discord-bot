@@ -5,8 +5,6 @@ import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.events.GenericEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
-import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
-import space.astrobot.discord.events.onAddMessageReaction
 
 object RlTrackerEventsManager {
     fun manage(jda: JDA) {

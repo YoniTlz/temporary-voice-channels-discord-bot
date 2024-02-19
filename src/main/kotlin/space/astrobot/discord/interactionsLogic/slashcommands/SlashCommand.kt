@@ -1,7 +1,6 @@
 package space.astrobot.discord.interactionsLogic.slashcommands
 
 import net.dv8tion.jda.api.Permission
-import net.dv8tion.jda.api.interactions.commands.CommandInteractionPayload
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
 import okhttp3.RequestBody.Companion.toRequestBody
 import space.astrobot.RestClient

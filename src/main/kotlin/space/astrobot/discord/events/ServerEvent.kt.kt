@@ -9,6 +9,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import space.astrobot.RestClient
 import java.util.stream.Collectors
 
+const val CHANNEL_REGLEMENT: String = "1064951736755818567"
 const val MSG_CHOIX_ROLES: String = "1148294440952287343"
 const val ROLE_GAMER: String = "1113468877381304450"
 const val ROLE_ROCKETTEUR: String = "1068560168863928330"

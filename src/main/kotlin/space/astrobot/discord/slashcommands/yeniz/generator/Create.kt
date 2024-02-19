@@ -31,6 +31,7 @@ class Create: SlashCommand(
         }
 
         val generator = action.await()
+        generator.manager.sync()
 
         GuildsDBI.pushValue(ctx.guildId, "generators", GeneratorDto(generator.id))
 
