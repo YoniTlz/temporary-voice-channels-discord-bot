@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import space.astrobot.RestClient
+import space.astrobot.RestClient.logErrorOnDiscord
 import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommand
 import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommandCTX
 

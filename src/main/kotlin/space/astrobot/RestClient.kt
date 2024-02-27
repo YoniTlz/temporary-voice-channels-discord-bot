@@ -2,6 +2,7 @@ package space.astrobot
 
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
@@ -37,6 +38,15 @@ object RestClient {
             .header("Authorization", Env.WebhookClient.webhook_client_token)
             .build()
         return execRequest(request)
+    }
+
+    fun logErrorOnDiscord(origin: String, message: String, payload: String, details: String) {
+        val jsonBody = "{\"origin\": \"$origin\"," +
+                "\"message\": \"$message\"," +
+                "\"payload\": \"$payload\"," +
+                "\"details\": \"$details\"}"
+        val res = execRequestPost("http://my-webhooks:8080/discord/log-error", jsonBody.toRequestBody(RestClient.JSON))
+        res.close()
     }
 
     private fun execRequest(request: Request): Response {

@@ -3,6 +3,7 @@ package space.astrobot.discord.slashcommands.yeniz.roles
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
+import space.astrobot.RestClient.logErrorOnDiscord
 import space.astrobot.discord.events.welcomeRole
 import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommand
 import space.astrobot.discord.interactionsLogic.slashcommands.SlashCommandCTX

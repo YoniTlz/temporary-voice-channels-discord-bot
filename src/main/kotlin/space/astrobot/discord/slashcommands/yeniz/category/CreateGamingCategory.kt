@@ -7,10 +7,12 @@ import net.dv8tion.jda.api.entities.Message.Attachment
 import net.dv8tion.jda.api.entities.Role
 import net.dv8tion.jda.api.entities.channel.concrete.Category
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel
+import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
 import okhttp3.RequestBody.Companion.toRequestBody
 import space.astrobot.RestClient
+import space.astrobot.RestClient.logErrorOnDiscord
 import space.astrobot.discord.events.CHANNEL_REGLEMENT
 import space.astrobot.discord.events.MSG_CHOIX_ROLES
 import space.astrobot.discord.events.ROLE_GAMER
@@ -45,6 +47,7 @@ class CreateGamingCategory : SlashCommand(
             ctx.guild.createCategory(categoryName)
                 .addPermissionOverride(ctx.guild.publicRole, null, EnumSet.of(Permission.VIEW_CHANNEL))
                 .queue(Consumer { category ->
+                    // onSuccess -> initNewCategory
                     initNewCategory(
                         category,
                         roleName,
@@ -53,7 +56,7 @@ class CreateGamingCategory : SlashCommand(
                         gameName,
                         ctx
                     )
-                }) // onSuccess -> initNewCategory
+                })
             // Reply
             if (roleName != null) {
                 ctx.reply("<a:verifyblue:1142917481976045588> Catégorie **${categoryName}** et rôle **${roleName}** créés avec succès")
@@ -79,14 +82,19 @@ class CreateGamingCategory : SlashCommand(
         gameName: String,
         ctx: SlashCommandCTX
     ) {
+        // Create Chat text channel inside category
         category.createTextChannel("\uD83D\uDCAC┃\uD835\uDDA2hat")
             .queue(Consumer { channel ->
-                run {
-                    if (channel != null) {
-                        createNewRole(category, roleName, channel, ctx) // Create new dedicated Role
-                        createRoleEmoji(category, emojiName, emoji, gameName, ctx) // Create new dedicated Emoji
-                    }
-                }
+                // onSuccess -> Create new dedicated Role
+                createNewRole(
+                    category,
+                    roleName,
+                    channel,
+                    emojiName,
+                    emoji,
+                    gameName,
+                    ctx
+                )
             })
     }
 
@@ -94,13 +102,27 @@ class CreateGamingCategory : SlashCommand(
         category: Category,
         roleName: String?,
         channel: TextChannel,
-        ctx: SlashCommandCTX,
+        emojiName: String,
+        emoji: Icon,
+        gameName: String,
+        ctx: SlashCommandCTX
     ) {
         if (roleName != null) {
             // Create new dedicated role
             val defaultGameRole = ctx.guild.getRoleById(ROLE_GAMER)!!
             ctx.guild.createCopyOfRole(defaultGameRole).setName(roleName)
-                .queue(Consumer { newRole -> allowNewRole(newRole, category, channel) }) // Handle Role permissions
+                .queue(Consumer { newRole ->
+                    // onSuccess -> Handle Role permissions & Create new dedicated Emoji})
+                    allowNewRole(newRole, category, channel)
+                    createRoleEmoji(
+                        category,
+                        roleName,
+                        emojiName,
+                        emoji,
+                        gameName,
+                        ctx
+                    )
+                })
         }
     }
 
@@ -109,6 +131,7 @@ class CreateGamingCategory : SlashCommand(
         category: Category,
         channel: TextChannel,
     ) {
+        // Stes the new category as private
         category.manager.putPermissionOverride(
             role, EnumSet.of(
                 Permission.VIEW_CHANNEL,
@@ -117,27 +140,33 @@ class CreateGamingCategory : SlashCommand(
                 Permission.VOICE_SPEAK
             ), null
         ).queue(Consumer { t ->
-            channel.manager.sync().queue() // Sync permissions with parent category
+            // onSuccess -> Sync permissions with parent category
+            channel.manager.sync().queue()
         })
     }
 
     private fun createRoleEmoji(
         category: Category,
+        roleName: String,
         emojiName: String,
         emoji: Icon,
         gameName: String,
         ctx: SlashCommandCTX,
     ) {
-        ctx.guild.createEmoji(emojiName, emoji, null).queue(Consumer { emoji ->
+        val roleId = ctx.guild.roles.find { role -> role.name == roleName }!!.id
+        ctx.guild.createEmoji(emojiName, emoji, null)
+            .queue(Consumer { emoji ->
+                // onSuccess -> Save new category in database
             val emojiString = "<:${emoji.name}:${emoji.id}>"
-            saveNewCategory(category, emojiString, emoji.id, gameName, ctx)
+            saveNewCategory(category, roleId, emojiString, emoji, gameName, ctx)
         })
     }
 
     private fun saveNewCategory(
         category: Category,
+        roleId: String,
         emojiString: String,
-        emojiId: String,
+        emoji: RichCustomEmoji,
         gameName: String,
         ctx: SlashCommandCTX
     ) {
@@ -146,15 +175,22 @@ class CreateGamingCategory : SlashCommand(
                 "\"categoryId\": \"${category.id}\"," +
                 "\"categoryName\": \"${category.name}\"," +
                 "\"gameName\": \"$gameName\"," +
-                "\"emojiString\": \"$emojiString\"" +
+                "\"roleId\": \"$roleId\"," +
+                "\"emojiString\": \"$emojiString\"," +
+                "\"emojiName\": \"${emoji.name}\"," +
+                "\"emojiId\": \"${emoji.id}\"" +
                 "}"
+        println(jsonBody)
         val res = RestClient.execRequestPost(url, jsonBody.toRequestBody(RestClient.JSON))
         res.close()
 
         if (res.code == 200) {
             // Add reaction
             val channel = ctx.guild.getTextChannelById(CHANNEL_REGLEMENT)!!
-            channel.retrieveMessageById(MSG_CHOIX_ROLES).queue(Consumer { message -> message.addReaction(ctx.guild.getEmojiById(emojiId)!!).queue() })
+            channel.retrieveMessageById(MSG_CHOIX_ROLES)
+                .queue(Consumer { message ->
+                    message.addReaction(ctx.guild.getEmojiById(emoji.id)!!).queue()
+                })
         }
     }
 }

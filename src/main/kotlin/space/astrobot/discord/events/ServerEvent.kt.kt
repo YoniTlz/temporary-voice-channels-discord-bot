@@ -6,14 +6,13 @@ import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInterac
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.api.interactions.commands.Command.Choice
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 import space.astrobot.RestClient
 import java.util.stream.Collectors
 
 const val CHANNEL_REGLEMENT: String = "1064951736755818567"
 const val MSG_CHOIX_ROLES: String = "1148294440952287343"
 const val ROLE_GAMER: String = "1113468877381304450"
-const val ROLE_ROCKETTEUR: String = "1068560168863928330"
-const val ROLE_APEXEUR: String = "1211686676829839381"
 
 suspend fun onServerJoin(event: GuildMemberJoinEvent) {
     val userMention = event.user.asMention
@@ -41,21 +40,31 @@ suspend fun onAddMessageReaction(event: MessageReactionAddEvent) {
     val userMention = event.member?.asMention
     var roleId = ""
 
+    // Gestion des rôles
     if (msgId == MSG_CHOIX_ROLES) {
         val emojiId = event.emoji.asCustom().id
-        if (emojiId == "1082687683773616239") {
-            roleId = ROLE_ROCKETTEUR
-        } else if (emojiId == "1082692441104199741") {
-            roleId = ROLE_APEXEUR
+        var categoryInfo = getCategoryInfo(emojiId)
+        roleId = categoryInfo.getString("roleId")
+        println("---roleID: $roleId")
+        val alreadyHasRole =
+            event.member?.roles?.stream()?.map { it.id }?.collect(Collectors.toList())?.contains(roleId)!!
+
+        if (userMention != null && roleId != null && !alreadyHasRole) {
+            event.guild.getRoleById(roleId)?.let { event.guild.addRoleToMember(event.member!!, it).queue() };
+            welcomeRole(userMention, roleId)
         }
     }
+}
 
-    val alreadyHasRole =
-        event.member?.roles?.stream()?.map { it.id }?.collect(Collectors.toList())?.contains(roleId)!!
-
-    if (userMention != null && roleId != null && !alreadyHasRole) {
-        event.guild.getRoleById(roleId)?.let { event.guild.addRoleToMember(event.member!!, it).queue() };
-        welcomeRole(userMention, roleId)
+suspend fun getCategoryInfo(emojiId: String): JSONObject {
+    val url = "http://my-webhooks:8080/discord/categories/query"
+    val jsonBody = "{\"queryString\":{\"emojiId\": \"$emojiId\"}}"
+    val res = RestClient.execRequestPost(url, jsonBody.toRequestBody(RestClient.JSON))
+    if (res.code == 200) {
+        val data = res.body?.string()
+        return JSONObject(data)
+    } else {
+        throw Exception("Erreur lors de la récupération de la catégorie, emojiId: $emojiId")
     }
 }
 
@@ -72,7 +81,7 @@ suspend fun welcomeRole(userMention: String, roleId: String) {
 suspend fun onCommandAutocomplete(event: CommandAutoCompleteInteractionEvent) {
     var suggestions: List<Choice> = mutableListOf()
 
-    if (event.fullCommandName == "addrole"|| event.fullCommandName == "removerole") {
+    if (event.fullCommandName == "addrole" || event.fullCommandName == "removerole") {
         val typing: String = event.focusedOption.value.orEmpty()
         if (event.focusedOption.name == "user") {
             val listMember = event.guild?.loadMembers()?.get().orEmpty()

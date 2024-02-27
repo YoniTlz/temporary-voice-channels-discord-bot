@@ -28,12 +28,4 @@ abstract class SlashCommand(
 ) : ExecutableSlashCommand {
     // Compiled path of the slash command (parent name if existing + self name)
     val path = (parentSlashCommand?.name?.plus(" ") ?: "") + name
-
-    fun logErrorOnDiscord(origin: String, message: String, payload: String, details: String) {
-        val jsonBody = "{\"origin\": \"$origin\"," +
-                "\"message\": \"$message\"," +
-                "\"payload\": \"$payload\"," +
-                "\"details\": \"$details\"}"
-        val res = execRequestPost("http://my-webhooks:8080/discord/log-error", jsonBody.toRequestBody(RestClient.JSON))
-        res.close()    }
 }
