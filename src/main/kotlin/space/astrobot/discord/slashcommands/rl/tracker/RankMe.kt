@@ -43,7 +43,8 @@ class RankMe : SlashCommand(
             }
             res.close()
         } catch (err: Exception) {
-            logErrorOnDiscord("RankMe", err.message.orEmpty(), "{userId: $userId, playlist: $playlist}", err.stackTraceToString())
+            val payload = "{userId: $userId, playlist: $playlist}"
+            handleError("RankMe", payload, err)
             ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
     }

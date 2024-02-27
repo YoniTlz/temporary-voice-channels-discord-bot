@@ -64,12 +64,8 @@ class CreateGamingCategory : SlashCommand(
                 ctx.reply("<a:verifyblue:1142917481976045588> Catégorie **${categoryName}** créée avec succès")
             }
         } catch (err: Exception) {
-            logErrorOnDiscord(
-                "CreateGamingCategory",
-                err.message.orEmpty(),
-                "{categoryName: $categoryName, gameName: $gameName, roleName: $roleName, emojiName: $emojiName}",
-                err.stackTraceToString()
-            )
+            val payload = "{categoryName: $categoryName, gameName: $gameName, roleName: $roleName, emojiName: $emojiName}"
+            handleError("CreateGamingCategory", payload, err)
             ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
     }
@@ -180,7 +176,6 @@ class CreateGamingCategory : SlashCommand(
                 "\"emojiName\": \"${emoji.name}\"," +
                 "\"emojiId\": \"${emoji.id}\"" +
                 "}"
-        println(jsonBody)
         val res = RestClient.execRequestPost(url, jsonBody.toRequestBody(RestClient.JSON))
         res.close()
 

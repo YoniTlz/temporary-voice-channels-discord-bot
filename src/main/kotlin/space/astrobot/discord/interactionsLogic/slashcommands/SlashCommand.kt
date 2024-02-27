@@ -5,6 +5,8 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData
 import okhttp3.RequestBody.Companion.toRequestBody
 import space.astrobot.RestClient
 import space.astrobot.RestClient.execRequestPost
+import java.lang.Error
+import java.lang.Exception
 
 // Interface made to have a default execute action for all slash commands
 interface ExecutableSlashCommand {
@@ -28,4 +30,14 @@ abstract class SlashCommand(
 ) : ExecutableSlashCommand {
     // Compiled path of the slash command (parent name if existing + self name)
     val path = (parentSlashCommand?.name?.plus(" ") ?: "") + name
+
+    fun handleError(origin: String, payload:String, error: Exception){
+        println(error)
+        RestClient.logErrorOnDiscord(
+            origin,
+            error.message.orEmpty(),
+            payload,
+            error.stackTraceToString()
+        )
+    }
 }

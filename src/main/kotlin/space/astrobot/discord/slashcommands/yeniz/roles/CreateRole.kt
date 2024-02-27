@@ -25,7 +25,8 @@ class CreateRole : SlashCommand(
             // Reply
             ctx.reply("Rôle **${roleName}** créé avec succès <a:verifyblue:1142917481976045588>")
         } catch (err: Exception) {
-            logErrorOnDiscord("CreateRole", err.message.orEmpty(), "{roleName: $roleName}", err.stackTraceToString())
+            val payload = "{roleName: $roleName}"
+            handleError("CreateRole", payload, err)
             ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
     }

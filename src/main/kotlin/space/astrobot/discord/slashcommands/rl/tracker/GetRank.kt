@@ -61,7 +61,8 @@ class GetRank : SlashCommand(
             }
             res.close()
         }catch (err: Exception){
-            logErrorOnDiscord("GetRank", err.message.orEmpty(), "{plateform: $plateform, plateformId: $plateformId, playlist: $playlist}", err.stackTraceToString())
+            val payload = "{plateform: $plateform, plateformId: $plateformId, playlist: $playlist}"
+            handleError("GetRank", payload, err)
             ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
     }

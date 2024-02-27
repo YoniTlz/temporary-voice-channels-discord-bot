@@ -50,7 +50,8 @@ class FreeGames : SlashCommand(
             // Reply
             ctx.reply("Récupération des jeux gratuits - **$plateforme** - Format **$format**")
         } catch (err: Exception) {
-            logErrorOnDiscord("FreeGames", err.message.orEmpty(), "{action: $action, format: $format}", err.stackTraceToString())
+            val payload = "{action: $action, format: $format}"
+            handleError("FreeGames", payload, err)
             ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
     }

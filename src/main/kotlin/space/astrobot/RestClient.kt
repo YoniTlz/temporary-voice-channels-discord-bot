@@ -45,7 +45,7 @@ object RestClient {
                 "\"message\": \"$message\"," +
                 "\"payload\": \"$payload\"," +
                 "\"details\": \"$details\"}"
-        val res = execRequestPost("http://my-webhooks:8080/discord/log-error", jsonBody.toRequestBody(RestClient.JSON))
+        val res = execRequestPost("http://my-webhooks:8080/discord/log-error", jsonBody.toRequestBody())
         res.close()
     }
 

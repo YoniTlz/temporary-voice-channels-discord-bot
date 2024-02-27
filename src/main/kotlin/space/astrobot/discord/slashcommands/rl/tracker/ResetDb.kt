@@ -22,7 +22,8 @@ class ResetDb : SlashCommand(
             }
             res.close()
         } catch (err: Exception) {
-            logErrorOnDiscord("ResetDb", err.message.orEmpty(), "{}", err.stackTraceToString())
+            val payload = "N/A"
+            handleError("ResetDb", payload, err)
             ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
     }

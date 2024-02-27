@@ -12,18 +12,21 @@ class DeleteRole : SlashCommand(
     description = "Supprime un rôle du serveur",
     requiredMemberPermissions = listOf(Permission.MANAGE_ROLES),
     options = listOf(
-        OptionData(OptionType.STRING, "nom", "Le nom du rôle", true, true)
+        OptionData(OptionType.ROLE, "role", "Le rôle à supprimer", true)
     )
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
-        val roleName = ctx.getOption<String>(options[0].name)!!
-        ctx.reply("Suppression du rôle  **${roleName}** en cours <a:loading:1206719713191792650>")
+        val roleId = ctx.getOption<String>(options[0].name)!!
+        val roleName = ctx.guild.getRoleById(roleId)?.name
+
+        ctx.reply("<a:loading:1206719713191792650> Suppression du rôle  **${roleName}** en cours")
         try {
-            ctx.guild.roles.filter { role -> role.name == roleName }[0].delete().queue()
+            ctx.guild.getRoleById(roleId)?.delete()?.queue()
             // Reply
-            ctx.reply("Rôle **${roleName}** supprimé avec succès <a:verifyblue:1142917481976045588>")
+            ctx.reply("<a:verifyblue:1142917481976045588> Rôle **${roleName}** supprimé avec succès")
         } catch (err: Exception) {
-            logErrorOnDiscord("DeleteRole", err.message.orEmpty(), "{roleName: $roleName}", err.stackTraceToString())
+            val payload = "{roleName: $roleName}"
+            handleError("DeleteRole", payload, err)
             ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
     }

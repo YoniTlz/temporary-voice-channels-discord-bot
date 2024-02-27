@@ -25,7 +25,8 @@ class NewSeason : SlashCommand(
             }
             res.close()
         } catch (err: Exception) {
-            logErrorOnDiscord("NewSeason", err.message.orEmpty(), "{}", err.stackTraceToString())
+            val payload = "N/A"
+            handleError("NewSeason", payload, err)
             ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
     }

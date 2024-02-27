@@ -6,15 +6,15 @@ import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInterac
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.api.interactions.commands.Command.Choice
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONObject
 import space.astrobot.RestClient
+import space.astrobot.WebhookClient.getCategoryByEmoji
 import java.util.stream.Collectors
 
 const val CHANNEL_REGLEMENT: String = "1064951736755818567"
 const val MSG_CHOIX_ROLES: String = "1148294440952287343"
 const val ROLE_GAMER: String = "1113468877381304450"
 
-suspend fun onServerJoin(event: GuildMemberJoinEvent) {
+fun onServerJoin(event: GuildMemberJoinEvent) {
     val userMention = event.user.asMention
     val jsonBody = "{" +
             "\"userMention\": \"$userMention\"" +
@@ -25,7 +25,7 @@ suspend fun onServerJoin(event: GuildMemberJoinEvent) {
     event.jda.getRoleById(ROLE_GAMER)?.let { event.guild.addRoleToMember(event.member, it).queue() }
 }
 
-suspend fun onServerLeave(event: GuildMemberRemoveEvent) {
+fun onServerLeave(event: GuildMemberRemoveEvent) {
     val userName = event.user.effectiveName
     val jsonBody = "{" +
             "\"userName\": \"$userName\"" +
@@ -33,9 +33,10 @@ suspend fun onServerLeave(event: GuildMemberRemoveEvent) {
     val url = "http://my-webhooks:8080/discord/server-leave"
     val res = RestClient.execRequestPost(url, jsonBody.toRequestBody(RestClient.JSON))
     res.close()
+
 }
 
-suspend fun onAddMessageReaction(event: MessageReactionAddEvent) {
+fun onAddMessageReaction(event: MessageReactionAddEvent) {
     val msgId = event.messageId
     val userMention = event.member?.asMention
     var roleId = ""
@@ -43,9 +44,9 @@ suspend fun onAddMessageReaction(event: MessageReactionAddEvent) {
     // Gestion des rôles
     if (msgId == MSG_CHOIX_ROLES) {
         val emojiId = event.emoji.asCustom().id
-        var categoryInfo = getCategoryInfo(emojiId)
-        roleId = categoryInfo.getString("roleId")
-        println("---roleID: $roleId")
+        val categoryInfo = getCategoryByEmoji(emojiId)!!
+        roleId = categoryInfo["roleId"] as String
+
         val alreadyHasRole =
             event.member?.roles?.stream()?.map { it.id }?.collect(Collectors.toList())?.contains(roleId)!!
 
@@ -56,19 +57,7 @@ suspend fun onAddMessageReaction(event: MessageReactionAddEvent) {
     }
 }
 
-suspend fun getCategoryInfo(emojiId: String): JSONObject {
-    val url = "http://my-webhooks:8080/discord/categories/query"
-    val jsonBody = "{\"queryString\":{\"emojiId\": \"$emojiId\"}}"
-    val res = RestClient.execRequestPost(url, jsonBody.toRequestBody(RestClient.JSON))
-    if (res.code == 200) {
-        val data = res.body?.string()
-        return JSONObject(data)
-    } else {
-        throw Exception("Erreur lors de la récupération de la catégorie, emojiId: $emojiId")
-    }
-}
-
-suspend fun welcomeRole(userMention: String, roleId: String) {
+fun welcomeRole(userMention: String, roleId: String) {
     val jsonBody = "{" +
             "\"userMention\": \"$userMention\"," +
             "\"roleId\": \"$roleId\"" +
@@ -78,9 +67,8 @@ suspend fun welcomeRole(userMention: String, roleId: String) {
     res.close()
 }
 
-suspend fun onCommandAutocomplete(event: CommandAutoCompleteInteractionEvent) {
+fun onCommandAutocomplete(event: CommandAutoCompleteInteractionEvent) {
     var suggestions: List<Choice> = mutableListOf()
-
     if (event.fullCommandName == "addrole" || event.fullCommandName == "removerole") {
         val typing: String = event.focusedOption.value.orEmpty()
         if (event.focusedOption.name == "user") {

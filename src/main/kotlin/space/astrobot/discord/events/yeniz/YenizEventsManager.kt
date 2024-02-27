@@ -11,10 +11,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 import space.astrobot.RestClient
-import space.astrobot.discord.events.onAddMessageReaction
-import space.astrobot.discord.events.onCommandAutocomplete
-import space.astrobot.discord.events.onServerJoin
-import space.astrobot.discord.events.onServerLeave
+import space.astrobot.discord.events.*
 
 object YenizEventsManager {
 
@@ -31,7 +28,13 @@ object YenizEventsManager {
                     is CommandAutoCompleteInteractionEvent -> onCommandAutocomplete(it)
                 }
             } catch (err: Exception) {
-                RestClient.logErrorOnDiscord("Event - ${it.javaClass}", err.message.orEmpty(), "{${it.rawData}}", err.stackTraceToString())
+                println(err)
+                RestClient.logErrorOnDiscord(
+                    "Event - $it",
+                    err.message.orEmpty(),
+                    "N/A",
+                    err.stackTraceToString()
+                )
             }
         }
     }

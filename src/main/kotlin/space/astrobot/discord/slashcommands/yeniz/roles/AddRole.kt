@@ -13,7 +13,7 @@ class AddRole : SlashCommand(
     description = "Ajoute un rôle à un membre",
     requiredMemberPermissions = listOf(Permission.MANAGE_ROLES),
     options = listOf(
-        OptionData(OptionType.STRING, "user", "L'utilisateur", true, true),
+        OptionData(OptionType.USER, "user", "L'utilisateur", true),
         OptionData(OptionType.STRING, "role", "Le rôle à attribuer", true, true)
     )
 ) {
@@ -29,7 +29,8 @@ class AddRole : SlashCommand(
             // Reply
             ctx.reply("Ajout du rôle **${role.name}** à l'utilisateur **${member.effectiveName}**")
         } catch (err: Exception) {
-            logErrorOnDiscord("AddRole", err.message.orEmpty(), "{userId: $userId, roleId: $roleId}", err.stackTraceToString())
+            val payload = "{userId: $userId, roleId: $roleId}"
+            handleError("AddRole", payload, err)
             ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
     }

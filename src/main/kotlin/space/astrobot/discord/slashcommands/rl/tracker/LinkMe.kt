@@ -66,7 +66,8 @@ class LinkMe : SlashCommand(
             }
             res.close()
         } catch (err: Exception) {
-            logErrorOnDiscord("LinkMe", err.message.orEmpty(), "{username: $username, plateforme: $plateforme, identifiant: $identifiant}", err.stackTraceToString())
+            val payload = "{username: $username, plateforme: $plateforme, identifiant: $identifiant}"
+            handleError("LinkMe", payload, err)
             ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
     }
