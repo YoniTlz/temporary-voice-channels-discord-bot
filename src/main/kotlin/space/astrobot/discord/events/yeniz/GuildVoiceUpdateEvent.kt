@@ -96,6 +96,7 @@ suspend fun onGuildVoiceUpdate(event: GuildVoiceUpdateEvent) {
         } else {
             val newOwner = event.channelLeft!!.members.first { !it.user.isBot }
             activeTempVoiceChannels[leftTempVoiceChannelIndex].ownerId = newOwner.id
+            event.guild.getVoiceChannelById(activeTempVoiceChannels[leftTempVoiceChannelIndex].id)!!.manager.setName(newOwner.effectiveName)
             TempVoiceChannelsRI.updateAllForGuild(guildId, activeTempVoiceChannels)
         }
     }
