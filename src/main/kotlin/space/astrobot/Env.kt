@@ -16,8 +16,10 @@ object Env {
     object Discord {
         lateinit var discord_bot_yeniz_token: String
         lateinit var discord_bot_rl_tracker_token: String
-        lateinit var activity: String
-        var activity_type_key: Int = 3
+        lateinit var yeniz_activity: String
+        var yeniz_activity_type_key: Int = 4
+        lateinit var rl_tracker_activity: String
+        var rl_tracker_activity_type_key: Int = 4
         var update_slash_commands: Boolean = true
         lateinit var working_guild_id: String
     }
@@ -44,8 +46,10 @@ object Env {
     fun loadEnv() {
         Discord.discord_bot_yeniz_token = get("DISCORD_BOT_YENIZ_TOKEN")
         Discord.discord_bot_rl_tracker_token = get("DISOCRD_BOT_RL_TRACKER_TOKEN")
-        Discord.activity = get("discord_activity")
-        Discord.activity_type_key = getInt("discord_activity_type_key")
+        Discord.yeniz_activity = get("yeniz_activity")
+        Discord.yeniz_activity_type_key = getInt("yeniz_activity_type_key")
+        Discord.rl_tracker_activity = get("rl_tracker_activity")
+        Discord.rl_tracker_activity_type_key = getInt("rl_tracker_activity_type_key")
         Discord.update_slash_commands = getBoolean("discord_update_slash_commands")
         Discord.working_guild_id = get("discord_working_guild_id")
 

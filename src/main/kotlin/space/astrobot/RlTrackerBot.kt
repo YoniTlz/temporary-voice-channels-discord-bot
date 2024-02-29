@@ -15,7 +15,7 @@ object RlTrackerBot {
     suspend fun start() {
         jda = JDABuilder.createLight(Env.Discord.discord_bot_rl_tracker_token)
             .setMemberCachePolicy(MemberCachePolicy.DEFAULT)
-            .setActivity(of(ActivityType.fromKey(Env.Discord.activity_type_key), Env.Discord.activity))
+            .setActivity(of(ActivityType.fromKey(Env.Discord.rl_tracker_activity_type_key), Env.Discord.rl_tracker_activity))
             .injectKTX() // Injects JDA-KTX library
             .build()
             .awaitReady() // Waits until JDA finishes loading

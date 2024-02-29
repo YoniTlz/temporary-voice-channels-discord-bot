@@ -16,7 +16,7 @@ object YenizBot {
     suspend fun start() {
         jda = JDABuilder.createDefault(Env.Discord.discord_bot_yeniz_token)
             .setMemberCachePolicy(MemberCachePolicy.VOICE)
-            .setActivity(of(ActivityType.fromKey(Env.Discord.activity_type_key), Env.Discord.activity))
+            .setActivity(of(ActivityType.fromKey(Env.Discord.yeniz_activity_type_key), Env.Discord.yeniz_activity))
             .enableIntents(GatewayIntent.GUILD_MEMBERS)
             .injectKTX() // Injects JDA-KTX library
             .build()
