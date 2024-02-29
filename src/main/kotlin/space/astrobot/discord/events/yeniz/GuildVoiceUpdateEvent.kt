@@ -2,7 +2,9 @@ package space.astrobot.discord.events.yeniz
 
 import dev.minn.jda.ktx.coroutines.await
 import mu.KotlinLogging
+import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
+import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
@@ -11,6 +13,7 @@ import net.dv8tion.jda.api.requests.ErrorResponse
 import space.astrobot.db.interactors.GuildsDBI
 import space.astrobot.models.TempVCDto
 import space.astrobot.redis.TempVoiceChannelsRI
+import java.awt.Color
 
 private val logger = KotlinLogging.logger {}
 
@@ -61,6 +64,8 @@ suspend fun onGuildVoiceUpdate(event: GuildVoiceUpdateEvent) {
         try {
             val tempVoiceChannel = action.await()
             guild.moveVoiceMember(member, tempVoiceChannel).await()
+            tempVoiceChannel.sendMessage("Salutations ${event.member.asMention} ! Bienvenue dans ton salon vocal temporaire, voici quelques astuces pour l'exploiter au mieux.").queue()
+            tempVoiceChannel.sendMessageEmbeds(buildTutoEmbed()).queue()
 
             activeTempVoiceChannels.add(
                 TempVCDto(
@@ -96,8 +101,17 @@ suspend fun onGuildVoiceUpdate(event: GuildVoiceUpdateEvent) {
         } else {
             val newOwner = event.channelLeft!!.members.first { !it.user.isBot }
             activeTempVoiceChannels[leftTempVoiceChannelIndex].ownerId = newOwner.id
-            event.guild.getVoiceChannelById(activeTempVoiceChannels[leftTempVoiceChannelIndex].id)!!.manager.setName(newOwner.effectiveName)
+            event.guild.getVoiceChannelById(activeTempVoiceChannels[leftTempVoiceChannelIndex].id)!!.manager.setName("Vocal de ${newOwner.effectiveName}").queue()
             TempVoiceChannelsRI.updateAllForGuild(guildId, activeTempVoiceChannels)
         }
     }
+}
+
+fun buildTutoEmbed(): MessageEmbed {
+    val eb = EmbedBuilder();
+    eb.setTitle("\uD83D\uDD0A Comment utiliser les salons temporaires comme un pro", null);
+    eb.setColor(Color(5727474));
+    eb.setDescription("Voici les différentes commandes que tu peux utiliser. Certaines te demanderont de spécifier des paramètres.");
+    eb.setImage("https://i.postimg.cc/sXr0r8Qh/Capture-d-e-cran-2023-08-17-a-19-15-48.png");
+    return eb.build()
 }
