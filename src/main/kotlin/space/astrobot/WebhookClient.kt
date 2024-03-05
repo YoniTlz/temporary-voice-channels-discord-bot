@@ -2,7 +2,7 @@ package space.astrobot
 
 import com.google.gson.Gson
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONArray
+import org.json.JSONObject
 
 object WebhookClient {
 
@@ -22,11 +22,11 @@ object WebhookClient {
         val res = RestClient.execRequestPost(url, jsonBody.toRequestBody(RestClient.JSON))
         if (res.code == 200) {
             val data = res.body?.string()
-            val category = JSONArray(data)[0].toString()
+            val category = JSONObject(data).toString()
             val gson = Gson()
             return gson.fromJson(category, Map::class.java)
         } else {
-            throw Exception("Erreur lors de la récupération de la catégorie, query: $queryString")
+            throw Exception("Erreur lors de la récupération de la catégorie - ${res.code} ${res.message} - query: $queryString")
         }
     }
 }

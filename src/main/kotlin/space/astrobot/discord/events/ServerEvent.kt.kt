@@ -62,7 +62,7 @@ fun welcomeRole(userMention: String, roleId: String) {
             "\"userMention\": \"$userMention\"," +
             "\"roleId\": \"$roleId\"" +
             "}"
-    val url = "http://my-webhooks:8080/discord/addRole"
+    val url = "http://my-webhooks:8080/discord/welcome-role"
     val res = RestClient.execRequestPost(url, jsonBody.toRequestBody(RestClient.JSON))
     res.close()
 }

@@ -30,7 +30,14 @@ class CreateGamingCategory : SlashCommand(
         OptionData(OptionType.STRING, "nom-jeu", "Le nom du jeu", true, false),
         OptionData(OptionType.STRING, "rôle", "Le rôle dédié à la catégorie", true, false),
         OptionData(OptionType.STRING, "nom-emoji", "Le nom de l'emoji du rôle", true, false),
-        OptionData(OptionType.ATTACHMENT, "icon-emoji", "L'emoji du rôle", true, false)
+        OptionData(OptionType.ATTACHMENT, "icon-emoji", "L'emoji du rôle", true, false),
+        OptionData(
+            OptionType.STRING,
+            "welcome-message",
+            "Le message d'accueil pour un nouveau membre de la catégorie",
+            false,
+            false
+        )
     )
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
@@ -39,6 +46,7 @@ class CreateGamingCategory : SlashCommand(
         val roleName = ctx.getOption<String>(options[2].name)!!
         val emojiName = ctx.getOption<String>(options[3].name)!!
         val emoji = ctx.getOption<Attachment>(options[4].name)!!
+        val welcomeMessage = ctx.getOption<String>(options[5].name) ?: ""
         val emojiIcon = emoji.proxy.downloadAsIcon().await()
 
         ctx.reply("<a:loading:1206719713191792650>Création de la catégorie  **${categoryName}** en cours")
@@ -54,6 +62,7 @@ class CreateGamingCategory : SlashCommand(
                         emojiName,
                         emojiIcon,
                         gameName,
+                        welcomeMessage,
                         ctx
                     )
                 })
@@ -64,7 +73,8 @@ class CreateGamingCategory : SlashCommand(
                 ctx.reply("<a:verifyblue:1142917481976045588> Catégorie **${categoryName}** créée avec succès")
             }
         } catch (err: Exception) {
-            val payload = "{categoryName: $categoryName, gameName: $gameName, roleName: $roleName, emojiName: $emojiName}"
+            val payload =
+                "{categoryName: $categoryName, gameName: $gameName, roleName: $roleName, emojiName: $emojiName}"
             handleError("CreateGamingCategory", payload, err)
             ctx.reply("❌ㅤOups... Une erreur est survenue")
         }
@@ -76,6 +86,7 @@ class CreateGamingCategory : SlashCommand(
         emojiName: String,
         emoji: Icon,
         gameName: String,
+        welcomeMessage: String,
         ctx: SlashCommandCTX
     ) {
         // Create Chat text channel inside category
@@ -89,6 +100,7 @@ class CreateGamingCategory : SlashCommand(
                     emojiName,
                     emoji,
                     gameName,
+                    welcomeMessage,
                     ctx
                 )
             })
@@ -101,6 +113,7 @@ class CreateGamingCategory : SlashCommand(
         emojiName: String,
         emoji: Icon,
         gameName: String,
+        welcomeMessage: String,
         ctx: SlashCommandCTX
     ) {
         if (roleName != null) {
@@ -112,10 +125,12 @@ class CreateGamingCategory : SlashCommand(
                     allowNewRole(newRole, category, channel)
                     createRoleEmoji(
                         category,
+                        channel.id,
                         roleName,
                         emojiName,
                         emoji,
                         gameName,
+                        welcomeMessage,
                         ctx
                     )
                 })
@@ -143,39 +158,46 @@ class CreateGamingCategory : SlashCommand(
 
     private fun createRoleEmoji(
         category: Category,
+        chatChannelId: String,
         roleName: String,
         emojiName: String,
         emoji: Icon,
         gameName: String,
+        welcomeMessage: String,
         ctx: SlashCommandCTX,
     ) {
         val roleId = ctx.guild.roles.find { role -> role.name == roleName }!!.id
         ctx.guild.createEmoji(emojiName, emoji, null)
             .queue(Consumer { emoji ->
                 // onSuccess -> Save new category in database
-            val emojiString = "<:${emoji.name}:${emoji.id}>"
-            saveNewCategory(category, roleId, emojiString, emoji, gameName, ctx)
-        })
+                val emojiString = "<:${emoji.name}:${emoji.id}>"
+                saveNewCategory(category, chatChannelId, roleId, emojiString, emoji, gameName, welcomeMessage, ctx)
+            })
     }
 
     private fun saveNewCategory(
         category: Category,
+        chatChannelId: String,
         roleId: String,
         emojiString: String,
         emoji: RichCustomEmoji,
         gameName: String,
+        welcomeMessage: String,
         ctx: SlashCommandCTX
     ) {
         val url = "http://my-webhooks:8080/discord/categories/add-game"
         val jsonBody = "{" +
                 "\"categoryId\": \"${category.id}\"," +
+                "\"chatChannelId\": \"${chatChannelId}\"," +
                 "\"categoryName\": \"${category.name}\"," +
                 "\"gameName\": \"$gameName\"," +
                 "\"roleId\": \"$roleId\"," +
                 "\"emojiString\": \"$emojiString\"," +
                 "\"emojiName\": \"${emoji.name}\"," +
-                "\"emojiId\": \"${emoji.id}\"" +
+                "\"emojiId\": \"${emoji.id}\"," +
+                "\"welcomeMessage\": \"${welcomeMessage}\"" +
                 "}"
+
         val res = RestClient.execRequestPost(url, jsonBody.toRequestBody(RestClient.JSON))
         res.close()
 
@@ -186,6 +208,8 @@ class CreateGamingCategory : SlashCommand(
                 .queue(Consumer { message ->
                     message.addReaction(ctx.guild.getEmojiById(emoji.id)!!).queue()
                 })
+        } else {
+            throw Exception("Une erreur est survenue lors de la sauvegarde de la nouvelle catégorie - Voir logs webhooks")
         }
     }
 }

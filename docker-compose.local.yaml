@@ -1,17 +1,17 @@
 version: "3.9"
 services:
-  #  my-webhooks:
-  #    image: yonitlz/my-webhooks:latest
-  #    container_name: "my-webhooks"
-  #    restart: always
-  #    ports:
-  #      - "8080:8080"
-  #    depends_on:
-  #      - astro-devlog-mongo
-  #    env_file:
-  #      - ../my-webhooks/.env
-  #    networks:
-  #      - astro-devlog-network
+  my-webhooks:
+    image: yonitlz/my-webhooks:latest
+    container_name: "my-webhooks"
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - astro-devlog-mongo
+    env_file:
+      - ../my-webhooks/.env
+    networks:
+      - astro-devlog-network
   astro-devlog:
     image: yonitlz/temporary-voice-channels-discord-bot:latest
     container_name: "astro-devlog"
