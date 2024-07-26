@@ -68,9 +68,9 @@ class CreateGamingCategory : SlashCommand(
                 })
             // Reply
             if (roleName != null) {
-                ctx.reply("<a:verifyblue:1142917481976045588> Catégorie **${categoryName}** et rôle **${roleName}** créés avec succès")
+                ctx.reply("<:success:1266385899696951419> Catégorie **${categoryName}** et rôle **${roleName}** créés avec succès")
             } else {
-                ctx.reply("<a:verifyblue:1142917481976045588> Catégorie **${categoryName}** créée avec succès")
+                ctx.reply("<:success:1266385899696951419> Catégorie **${categoryName}** créée avec succès")
             }
         } catch (err: Exception) {
             val payload =
