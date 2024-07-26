@@ -22,7 +22,7 @@ class DeleteCategory : SlashCommand(
         val categoryId = ctx.getOption<String>(options[0].name)!!
         val categoryName = ctx.guild.getCategoryById(categoryId)?.name
 
-        ctx.reply("<a:loading:1206719713191792650> Suppression de la catégorie  **${categoryName}** en cours")
+        ctx.reply("<a:loading:1266380721140928512> Suppression de la catégorie  **${categoryName}** en cours")
         try {
             // Delete all category channels
             val category = ctx.guild.categories.find { cat -> cat.name == categoryName }!!

@@ -18,7 +18,7 @@ class CreateRole : SlashCommand(
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
         val roleName = ctx.getOption<String>(options[0].name)!!
-        ctx.reply("Création du rôle  **${roleName}** en cours <a:loading:1206719713191792650>")
+        ctx.reply("Création du rôle  **${roleName}** en cours <a:loading:1266380721140928512>")
         try {
             val defaultGameRole = ctx.guild.roles.filter { role -> role.id == ROLE_GAMER }[0]
             ctx.guild.createCopyOfRole(defaultGameRole).setName(roleName).queue()

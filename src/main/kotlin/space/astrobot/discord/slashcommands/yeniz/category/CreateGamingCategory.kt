@@ -49,7 +49,7 @@ class CreateGamingCategory : SlashCommand(
         val welcomeMessage = ctx.getOption<String>(options[5].name) ?: ""
         val emojiIcon = emoji.proxy.downloadAsIcon().await()
 
-        ctx.reply("<a:loading:1206719713191792650>Création de la catégorie  **${categoryName}** en cours")
+        ctx.reply("<a:loading:1266380721140928512>Création de la catégorie  **${categoryName}** en cours")
         try {
             // Create new category
             ctx.guild.createCategory(categoryName)

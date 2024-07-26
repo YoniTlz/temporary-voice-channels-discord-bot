@@ -19,7 +19,7 @@ class DeleteRole : SlashCommand(
         val roleId = ctx.getOption<String>(options[0].name)!!
         val roleName = ctx.guild.getRoleById(roleId)?.name
 
-        ctx.reply("<a:loading:1206719713191792650> Suppression du rôle  **${roleName}** en cours")
+        ctx.reply("<a:loading:1266380721140928512> Suppression du rôle  **${roleName}** en cours")
         try {
             ctx.guild.getRoleById(roleId)?.delete()?.queue()
             // Reply
