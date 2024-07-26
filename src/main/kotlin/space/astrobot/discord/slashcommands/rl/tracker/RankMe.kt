@@ -37,15 +37,15 @@ class RankMe : SlashCommand(
                 jsonBody.toRequestBody(RestClient.JSON)
             )
             if (res.code == 422) {
-                ctx.reply("❌ㅤAucun compte trouvé - Utilise la commande **/linkme** pour associer ton compte")
+                ctx.reply("<:error:1266386370947973150>ㅤAucun compte trouvé - Utilise la commande **/linkme** pour associer ton compte")
             } else {
-                ctx.reply("✅ㅤTes classements ont été correctement récupérés")
+                ctx.reply("<:success:1266385899696951419>ㅤTes classements ont été correctement récupérés")
             }
             res.close()
         } catch (err: Exception) {
             val payload = "{userId: $userId, playlist: $playlist}"
             handleError("RankMe", payload, err)
-            ctx.reply("❌ㅤOups... Une erreur est survenue")
+            ctx.reply("<:error:1266386370947973150>ㅤOups... Une erreur est survenue")
         }
     }
 }

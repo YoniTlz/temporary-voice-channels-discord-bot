@@ -52,18 +52,18 @@ class GetRank : SlashCommand(
                 jsonBody.toRequestBody(RestClient.JSON)
             )
             if (res.code == 404) {
-                ctx.reply("❌ㅤCompte introuvable - Vérifie que la plateforme et l'identifiant sont corrects")
+                ctx.reply("<:error:1266386370947973150>ㅤCompte introuvable - Vérifie que la plateforme et l'identifiant sont corrects")
             } else {
                 val data = res.body?.string()
                 val json = JSONObject(data)
                 val displayName = json.getString("displayName")
-                ctx.reply("✅ㅤLes classements de ***${displayName}*** ont été correctement récupérés")
+                ctx.reply("<:success:1266385899696951419>ㅤLes classements de ***${displayName}*** ont été correctement récupérés")
             }
             res.close()
         }catch (err: Exception){
             val payload = "{plateform: $plateform, plateformId: $plateformId, playlist: $playlist}"
             handleError("GetRank", payload, err)
-            ctx.reply("❌ㅤOups... Une erreur est survenue")
+            ctx.reply("<:error:1266386370947973150>ㅤOups... Une erreur est survenue")
         }
     }
 }

@@ -49,7 +49,7 @@ class LinkMe : SlashCommand(
             when (res.code) {
                 404 -> {
                     val username = identifiant.replaceFirstChar(Char::titlecase)
-                    ctx.reply("❌️ㅤLe compte **$identifiant** est introuvable sur la plateforme **$plateformeString**")
+                    ctx.reply("<:error:1266386370947973150>️ㅤLe compte **$identifiant** est introuvable sur la plateforme **$plateformeString**")
                 }
 
                 422 -> {
@@ -57,18 +57,18 @@ class LinkMe : SlashCommand(
                 }
 
                 201 -> {
-                    ctx.reply("✅  Ton compte **$plateformeString** a été correctement associé")
+                    ctx.reply("<:success:1266385899696951419>  Ton compte **$plateformeString** a été correctement associé")
                 }
 
                 202 -> {
-                    ctx.reply("✅  Ton compte **$plateformeString** a été correctement mis à jour")
+                    ctx.reply("<:success:1266385899696951419>  Ton compte **$plateformeString** a été correctement mis à jour")
                 }
             }
             res.close()
         } catch (err: Exception) {
             val payload = "{username: $username, plateforme: $plateforme, identifiant: $identifiant}"
             handleError("LinkMe", payload, err)
-            ctx.reply("❌ㅤOups... Une erreur est survenue")
+            ctx.reply("<:error:1266386370947973150>ㅤOups... Une erreur est survenue")
         }
     }
 }

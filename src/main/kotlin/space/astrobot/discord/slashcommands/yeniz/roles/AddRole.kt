@@ -31,7 +31,7 @@ class AddRole : SlashCommand(
         } catch (err: Exception) {
             val payload = "{userId: $userId, roleId: $roleId}"
             handleError("AddRole", payload, err)
-            ctx.reply("❌ㅤOups... Une erreur est survenue")
+            ctx.reply("<:error:1266386370947973150>ㅤOups... Une erreur est survenue")
         }
     }
 

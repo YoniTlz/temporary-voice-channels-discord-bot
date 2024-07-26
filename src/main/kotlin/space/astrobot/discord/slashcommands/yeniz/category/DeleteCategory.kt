@@ -22,7 +22,7 @@ class DeleteCategory : SlashCommand(
         val categoryId = ctx.getOption<String>(options[0].name)!!
         val categoryName = ctx.guild.getCategoryById(categoryId)?.name
 
-        ctx.reply("<a:loading:1266380721140928512> Suppression de la catégorie  **${categoryName}** en cours")
+        ctx.reply("<a:loading:1266380721140928512>  Suppression de la catégorie  **${categoryName}** en cours")
         try {
             // Delete all category channels
             val category = ctx.guild.categories.find { cat -> cat.name == categoryName }!!
@@ -40,7 +40,7 @@ class DeleteCategory : SlashCommand(
         } catch (err: Exception) {
             val payload = "{categoryName: $categoryName}"
             handleError("DeleteCategory", payload, err)
-            ctx.reply("❌ㅤOups... Une erreur est survenue")
+            ctx.reply("<:error:1266386370947973150>ㅤOups... Une erreur est survenue")
         }
     }
 }

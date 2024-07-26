@@ -49,7 +49,7 @@ class CreateGamingCategory : SlashCommand(
         val welcomeMessage = ctx.getOption<String>(options[5].name) ?: ""
         val emojiIcon = emoji.proxy.downloadAsIcon().await()
 
-        ctx.reply("<a:loading:1266380721140928512>Création de la catégorie  **${categoryName}** en cours")
+        ctx.reply("<a:loading:1266380721140928512>  Création de la catégorie  **${categoryName}** en cours")
         try {
             // Create new category
             ctx.guild.createCategory(categoryName)
@@ -68,15 +68,15 @@ class CreateGamingCategory : SlashCommand(
                 })
             // Reply
             if (roleName != null) {
-                ctx.reply("<:success:1266385899696951419> Catégorie **${categoryName}** et rôle **${roleName}** créés avec succès")
+                ctx.reply("<:success:1266385899696951419>  Catégorie **${categoryName}** et rôle **${roleName}** créés avec succès")
             } else {
-                ctx.reply("<:success:1266385899696951419> Catégorie **${categoryName}** créée avec succès")
+                ctx.reply("<:success:1266385899696951419>  Catégorie **${categoryName}** créée avec succès")
             }
         } catch (err: Exception) {
             val payload =
                 "{categoryName: $categoryName, gameName: $gameName, roleName: $roleName, emojiName: $emojiName}"
             handleError("CreateGamingCategory", payload, err)
-            ctx.reply("❌ㅤOups... Une erreur est survenue")
+            ctx.reply("<:error:1266386370947973150>ㅤOups... Une erreur est survenue")
         }
     }
 

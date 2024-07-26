@@ -19,15 +19,15 @@ class DeleteRole : SlashCommand(
         val roleId = ctx.getOption<String>(options[0].name)!!
         val roleName = ctx.guild.getRoleById(roleId)?.name
 
-        ctx.reply("<a:loading:1266380721140928512> Suppression du rôle  **${roleName}** en cours")
+        ctx.reply("<a:loading:1266380721140928512>  Suppression du rôle  **${roleName}** en cours")
         try {
             ctx.guild.getRoleById(roleId)?.delete()?.queue()
             // Reply
-            ctx.reply("<:success:1266385899696951419> Rôle **${roleName}** supprimé avec succès")
+            ctx.reply("<:success:1266385899696951419>  Rôle **${roleName}** supprimé avec succès")
         } catch (err: Exception) {
             val payload = "{roleName: $roleName}"
             handleError("DeleteRole", payload, err)
-            ctx.reply("❌ㅤOups... Une erreur est survenue")
+            ctx.reply("<:error:1266386370947973150>ㅤOups... Une erreur est survenue")
         }
     }
 

@@ -18,16 +18,16 @@ class CreateRole : SlashCommand(
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
         val roleName = ctx.getOption<String>(options[0].name)!!
-        ctx.reply("Création du rôle  **${roleName}** en cours <a:loading:1266380721140928512>")
+        ctx.reply("<a:loading:1266380721140928512>  Création du rôle  **${roleName}** en cours")
         try {
             val defaultGameRole = ctx.guild.roles.filter { role -> role.id == ROLE_GAMER }[0]
             ctx.guild.createCopyOfRole(defaultGameRole).setName(roleName).queue()
             // Reply
-            ctx.reply("Rôle **${roleName}** créé avec succès <:success:1266385899696951419>")
+            ctx.reply(" <:success:1266385899696951419>  Rôle **${roleName}** créé avec succès")
         } catch (err: Exception) {
             val payload = "{roleName: $roleName}"
             handleError("CreateRole", payload, err)
-            ctx.reply("❌ㅤOups... Une erreur est survenue")
+            ctx.reply("<:error:1266386370947973150>ㅤOups... Une erreur est survenue")
         }
     }
 

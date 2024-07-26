@@ -16,15 +16,15 @@ class ResetDb : SlashCommand(
         try {
             val res = RestClient.execRequestPost("http://my-webhooks:8080/rl-tracker/resetCollection", null)
             if (res.code == 500) {
-                ctx.reply("❌ㅤOups... Une erreur est survenue")
+                ctx.reply("<:error:1266386370947973150>ㅤOups... Une erreur est survenue")
             } else {
-                ctx.reply("✅ㅤLa base de données a correctement été réinitialisée")
+                ctx.reply("<:success:1266385899696951419>ㅤLa base de données a correctement été réinitialisée")
             }
             res.close()
         } catch (err: Exception) {
             val payload = "N/A"
             handleError("ResetDb", payload, err)
-            ctx.reply("❌ㅤOups... Une erreur est survenue")
+            ctx.reply("<:error:1266386370947973150>ㅤOups... Une erreur est survenue")
         }
     }
 }
