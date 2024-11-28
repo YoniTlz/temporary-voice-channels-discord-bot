@@ -32,7 +32,7 @@ class GetRank : SlashCommand(
     )
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
-        ctx.reply("🌐ㅤRécupération des classements. Cela peut prendre quelques secondes...")
+        ctx.reply("<a:loading:1266380721140928512>ㅤRécupération des classements. Cela peut prendre quelques secondes...")
         val plateform = ctx.getOption<String>(options[0].name)!!
         var plateformId = ctx.getOption<String>(options[1].name)!!
         val playlist = ctx.getOption<String>(options[2].name)!!

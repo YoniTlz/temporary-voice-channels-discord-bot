@@ -22,7 +22,7 @@ class RankMe : SlashCommand(
     )
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
-        ctx.reply("🌐ㅤRécupération des classements. Cela peut prendre quelques secondes...")
+        ctx.reply("<a:loading:1266380721140928512>ㅤRécupération des classements. Cela peut prendre quelques secondes...")
         var channelId = ctx.channel.id
         var userId = ctx.user.id
         val playlist = ctx.getOption<String>(options[0].name)!!

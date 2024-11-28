@@ -26,7 +26,7 @@ class LinkMe : SlashCommand(
     )
 ) {
     override suspend fun execute(ctx: SlashCommandCTX) {
-        ctx.reply("🌐ㅤAssociation du comte en cours...")
+        ctx.reply("<a:loading:1266380721140928512>ㅤAssociation du comte en cours...")
         val plateforme = ctx.getOption<String>(options[0].name)!!
         val identifiant = ctx.getOption<String>(options[1].name)!!
         val channelId = ctx.channel.id
